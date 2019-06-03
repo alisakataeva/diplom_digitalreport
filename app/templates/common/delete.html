@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="page-header">
+  <h3>Удалить:</h3>
+</div>
+
+<hr>
+      
+<form action="" method="post">
+
+    {% csrf_token %}
+
+    <p>Вы действительно хотите удалить <strong>{{ object }}</strong>?</p>
+
+    <hr>
+
+    <input type="submit" class="btn btn-danger" value="Удалить" style="margin-top: 32px;">
+    <a class="btn btn-primary" href="{{ next }}" style="margin-top: 32px;color:white;">Отмена</a>
+
+</form>
+    
+{% endblock %}

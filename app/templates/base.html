@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.3.1.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome-4.7.0.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-clockpicker.min.css' %}">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet"> -->
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+    {% block body %}{% endblock %}
+
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-4.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-clockpicker.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

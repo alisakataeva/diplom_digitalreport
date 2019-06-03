@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+{% url 'index' as back_url %}
+{% url 'klass_create' as create_url %}
+
+{% include 'common/list_top.html' %}
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Класс</th>
+      <th>Год зачисления</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for object in object_list %}
+
+    {% url 'klass_update' pk=object.pk as update_url %}
+    {% url 'klass_delete' pk=object.pk as delete_url %}
+
+    <tr>
+      <td>{{ object.get_number }}</td>
+      <td>{{ object.god_z }}</td>
+      <td>
+
+        {% if update_url %}
+        <a class="btn btn-warning" href="{{ update_url }}?next={{ request.path }}"
+        data-toggle="tooltip" data-placement="bottom" title="Редактировать">
+          <i class="fa fa-pencil"></i>
+        </a>
+        {% endif %}
+
+        {% if delete_url %}
+        <a class="btn btn-danger" href="{{ delete_url }}?next={{ request.path }}"
+          data-toggle="tooltip" data-placement="bottom" title="Удалить">
+          <i class="fa fa-trash"></i>
+        </a>
+        {% endif %}
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% include 'common/list_bottom.html' %}
+
+{% endblock %}

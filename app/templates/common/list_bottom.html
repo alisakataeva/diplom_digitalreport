@@ -1,0 +1,5 @@
+<hr />
+
+{% if create_url %}
+<a href="{{ create_url }}?next={{ request.path }}" class="btn btn-outline-success btn-block"><i class="fa fa-plus"></i> Добавить</a>
+{% endif %}

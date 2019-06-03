@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">Гибкий генератор цифровой отчетности образовательного учреждения</a>
+</nav>
+
+<br />
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+
+      <nav class="nav nav-pills flex-column">
+
+        {% url 'classbooknote_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Журнал</a>
+
+        {% url 'klass_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Классы</a>
+
+        {% url 'plan_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Планы</a>
+
+        {% url 'subject_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Предметы</a>
+
+        {% url 'program_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Программы</a>
+
+        {% url 'schoolyear_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учебные года</a>
+
+        {% url 'student_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Ученики</a>
+
+        {% url 'teacher_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учителя</a>
+
+        <a href="" class="dropdown-divider"></a>
+
+        {% url 'report_study_results' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет о прохождении учебного материала</a>
+
+        {% url 'report_study_level' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет об успеваемости по предметам</a>
+
+        {% url 'report_klass_study_level' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет классного руководителя об успеваемости</a>
+
+        {% url 'report_klass_attendance' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет классного руководителя о посещаемости</a>
+
+        {% url 'report_total_study_results' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о прохождении учебного материала</a>
+
+        {% url 'report_total_study_level' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет об успеваемости</a>
+
+        {% url 'report_total_attendance' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о посещаемости</a>
+
+      </nav>
+
+    </div>
+    <div class="col">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

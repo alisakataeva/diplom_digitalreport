@@ -1,0 +1,71 @@
+{% extends 'index.html' %}
+
+{% block styles %}
+
+<style>
+.form-errors {
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h3>Редактировать:</h3>
+</div>
+
+<form action="" method="post" enctype="multipart/form-data">
+
+  {% csrf_token %}
+  {% include 'common/form.html' %}
+
+  <br /><br />
+
+  <input type="submit" class="btn btn-success" value="Сохранить" style="margin-top: 32px;">
+  <a class="btn btn-primary" href="{{ next }}" style="margin-top: 32px;color:white;">Отмена</a>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+$('#id_data_z').datepicker({
+  format: 'yyyy-mm-dd',
+  language: 'ru-ru',
+});
+$('#id_time_z').clockpicker({
+  donetext: 'Выбрать'
+});
+
+// $('#data_z').datepicker({
+//   format: 'yyyy-mm-dd',
+//   minViewMode: 'years'
+// });
+  
+// $('#time_z').datepicker({
+//   format: 'yyyy-mm-dd',
+// });
+
+// $('#id_date_signed').datepicker({
+//   format: 'yyyy-mm-dd',
+// });
+
+// $('#id_date').datepicker({
+//   format: 'yyyy-mm-dd',
+// });
+
+// $('#id_date_birth').datepicker({
+//   format: 'yyyy-mm-dd',
+// });
+
+</script>
+
+{% endblock %}
