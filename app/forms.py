@@ -38,9 +38,10 @@ class PlanForm(forms.ModelForm):
 
     class Meta:
         model = Plan
-        fields = ['author', 'schoolyear', 'n_ob', 'k_ob', 'kol_ch']
+        fields = ['author', 'subject', 'schoolyear', 'n_ob', 'k_ob', 'kol_ch']
         widgets = {
             'author': forms.Select(attrs={'class': 'form-control'}),
+            'subject': forms.Select(attrs={'class': 'form-control'}),
             'schoolyear': forms.Select(attrs={'class': 'form-control'}),
             'n_ob': forms.TextInput(attrs={'class': 'form-control'}),
             'k_ob': forms.TextInput(attrs={'class': 'form-control'}),

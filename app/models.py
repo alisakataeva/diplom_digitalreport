@@ -50,6 +50,9 @@ class Klass(models.Model):
         else:
             return str( gap+1 ) + self.buk
 
+    def get_students_count(self):
+        return self.student_set.count()
+
 
 class Teacher(models.Model):
     fio_uchit = models.CharField(verbose_name=u"ФИО учителя", max_length=50)
@@ -85,8 +88,22 @@ class SchoolYear(models.Model):
         return "%s - %s" % ( str( self.nach_g ), str( self.kon_g ) ) 
 
 
+class Subject(models.Model):
+    teacher = models.ForeignKey(Teacher, verbose_name="Учитель", on_delete=models.CASCADE)
+
+    pred = models.CharField(verbose_name=u"Предмет", max_length=30)
+
+    class Meta:
+        verbose_name = 'предмет'
+        verbose_name_plural = 'предметы'
+
+    def __str__(self):
+        return "<Предмет : %s>" % self.pred
+
+
 class Plan(models.Model):
     author = models.ForeignKey(Teacher, verbose_name="Составитель", on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, verbose_name="Предмет", on_delete=models.CASCADE)
     schoolyear = models.ForeignKey(SchoolYear, verbose_name="Учебный год", on_delete=models.CASCADE)
 
     n_ob = models.DateField(verbose_name=u"Начало обучения")
@@ -98,7 +115,10 @@ class Plan(models.Model):
         verbose_name_plural = 'планы'
 
     def __str__(self):
-        return "<План : %s - %s (%s)>" % ( str( self.n_ob ), str( self.k_ob ), str( self.kol_ch ) )
+        return "<План : %s (%s)>" % ( self.display(), str( self.kol_ch ) )
+
+    def display(self):
+        return "%s - %s" % ( str( self.n_ob ), str( self.k_ob ) )
 
 
 class Program(models.Model):
@@ -114,19 +134,6 @@ class Program(models.Model):
 
     def __str__(self):
         return "<Программа : %s>" % self.tema
-
-
-class Subject(models.Model):
-    teacher = models.ForeignKey(Teacher, verbose_name="Учитель", on_delete=models.CASCADE)
-
-    pred = models.CharField(verbose_name=u"Предмет", max_length=30)
-
-    class Meta:
-        verbose_name = 'предмет'
-        verbose_name_plural = 'предметы'
-
-    def __str__(self):
-        return "<Предмет : %s>" % self.pred
 
 
 class Student(models.Model):

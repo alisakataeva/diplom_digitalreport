@@ -14,31 +14,60 @@
 
       <nav class="nav nav-pills flex-column">
 
-        {% url 'classbooknote_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Журнал</a>
 
-        {% url 'klass_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Классы</a>
-
-        {% url 'plan_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Планы</a>
-
-        {% url 'subject_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Предметы</a>
-
-        {% url 'program_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Программы</a>
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Года и планы:</a>
 
         {% url 'schoolyear_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учебные года</a>
 
-        {% url 'student_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Ученики</a>
+        {% url 'plan_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Планы</a>
+
+
+        <a href="" class="dropdown-divider"></a>
+
 
         {% url 'teacher_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учителя</a>
 
+
         <a href="" class="dropdown-divider"></a>
+
+
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Классы и ученики:</a>
+
+        {% url 'klass_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Классы</a>
+
+        {% url 'student_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Ученики</a>
+
+
+        <a href="" class="dropdown-divider"></a>
+
+
+        {% url 'program_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Программы</a>
+
+
+        <a href="" class="dropdown-divider"></a>
+
+
+        {% url 'classbooknote_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Журнал</a>
+
+
+        <a href="" class="dropdown-divider"></a>
+
+
+        {% url 'subject_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Предметы</a>
+
+
+        <a href="" class="dropdown-divider"></a>
+
+
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Отчеты:</a>
 
         {% url 'report_study_results' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет о прохождении учебного материала</a>
@@ -60,6 +89,10 @@
 
         {% url 'report_total_attendance' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о посещаемости</a>
+
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
 
       </nav>
 

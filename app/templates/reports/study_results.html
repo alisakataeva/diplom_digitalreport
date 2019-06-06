@@ -4,4 +4,29 @@
 
 <h1>Отчет о прохождении учебного материала</h1>
 
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Период</th>
+      <th>ФИО учителя</th>
+      <th>Предмет</th>
+      <th>Кол-во часов по плану</th>
+      <th>Кол-во выданных часов</th>
+      <th>Разница</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row.display }}</td>
+      <td>{{ row.author.fio_uchit }}</td>
+      <td>{{ row.subject.pred }}</td>
+      <td>{{ row.kol_ch }}</td>
+      <td>{{ row.used_hours }}</td>
+      <td>{{ row.hours_diff }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
