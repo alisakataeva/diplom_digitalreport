@@ -38,7 +38,7 @@ class Klass(models.Model):
         verbose_name_plural = 'классы'
 
     def __str__(self):
-        return "<Класс : %s" % self.get_number()
+        return "<Класс : %s>" % self.get_number()
 
     def get_number(self):
         gap = datetime.today().year-self.god_z
