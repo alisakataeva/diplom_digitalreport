@@ -32,7 +32,7 @@
       <td>{{ object.student.fio_uch }}</td>
       <td>{{ object.get_pris_display }}</td>
       <td>{{ object.oc }}</td>
-      <td>{{ object.prim }}</td>
+      <td>{{ object.prim|default:"-" }}</td>
       <td>
 
         {% if update_url %}

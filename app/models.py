@@ -30,8 +30,8 @@ SYSTEM_ROLES = (
 
 
 class Klass(models.Model):
-    god_z = models.IntegerField(verbose_name="Год зачисления")
-    buk = models.CharField(max_length=1, verbose_name="буква")
+    god_z = models.IntegerField(verbose_name="Год зачисления: *")
+    buk = models.CharField(max_length=1, verbose_name="Буква: *")
 
     class Meta:
         verbose_name = 'класс'
@@ -55,13 +55,13 @@ class Klass(models.Model):
 
 
 class Teacher(models.Model):
-    fio_uchit = models.CharField(verbose_name=u"ФИО учителя", max_length=50)
-    dol = models.CharField(verbose_name=u"Должность", max_length=50, choices=SCHOOL_ROLES)
-    tel = models.CharField(verbose_name=u"Телефон", max_length=50)
-    mail = models.CharField(verbose_name=u"E-mail", max_length=50)
-    log = models.CharField(verbose_name=u"Логин", max_length=50)
-    par = models.CharField(verbose_name=u"Пароль", max_length=50)
-    tip = models.CharField(verbose_name=u"Тип пользователя", max_length=50, choices=SYSTEM_ROLES)
+    fio_uchit = models.CharField(verbose_name=u"ФИО учителя: *", max_length=50)
+    dol = models.CharField(verbose_name=u"Должность: *", max_length=50, choices=SCHOOL_ROLES)
+    tel = models.CharField(verbose_name=u"Телефон: *", max_length=50)
+    mail = models.CharField(verbose_name=u"E-mail: *", max_length=50)
+    log = models.CharField(verbose_name=u"Логин: *", max_length=50)
+    par = models.CharField(verbose_name=u"Пароль: *", max_length=50)
+    tip = models.CharField(verbose_name=u"Тип пользователя: *", max_length=50, choices=SYSTEM_ROLES)
 
     class Meta:
         verbose_name = 'учитель'
@@ -72,10 +72,10 @@ class Teacher(models.Model):
 
 
 class SchoolYear(models.Model):
-    klass = models.ForeignKey(Klass, verbose_name="Класс", on_delete=models.CASCADE)
+    klass = models.ForeignKey(Klass, verbose_name="Класс: *", on_delete=models.CASCADE)
 
-    nach_g = models.DateField(verbose_name=u"Начало года")
-    kon_g = models.DateField(verbose_name=u"Конец года")
+    nach_g = models.DateField(verbose_name=u"Начало года: *")
+    kon_g = models.DateField(verbose_name=u"Конец года: *")
 
     class Meta:
         verbose_name = 'учебный год'
@@ -89,9 +89,9 @@ class SchoolYear(models.Model):
 
 
 class Subject(models.Model):
-    teacher = models.ForeignKey(Teacher, verbose_name="Учитель", on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, verbose_name="Учитель: *", on_delete=models.CASCADE)
 
-    pred = models.CharField(verbose_name=u"Предмет", max_length=30)
+    pred = models.CharField(verbose_name=u"Предмет: *", max_length=30)
 
     class Meta:
         verbose_name = 'предмет'
@@ -102,13 +102,13 @@ class Subject(models.Model):
 
 
 class Plan(models.Model):
-    author = models.ForeignKey(Teacher, verbose_name="Составитель", on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, verbose_name="Предмет", on_delete=models.CASCADE)
-    schoolyear = models.ForeignKey(SchoolYear, verbose_name="Учебный год", on_delete=models.CASCADE)
+    author = models.ForeignKey(Teacher, verbose_name="Составитель: *", on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, verbose_name="Предмет: *", on_delete=models.CASCADE)
+    schoolyear = models.ForeignKey(SchoolYear, verbose_name="Учебный год: *", on_delete=models.CASCADE)
 
-    n_ob = models.DateField(verbose_name=u"Начало обучения")
-    k_ob = models.DateField(verbose_name=u"Конец обучения")
-    kol_ch = models.IntegerField(verbose_name=u"Количество часов")
+    n_ob = models.DateField(verbose_name=u"Начало обучения: *")
+    k_ob = models.DateField(verbose_name=u"Конец обучения: *")
+    kol_ch = models.IntegerField(verbose_name=u"Количество часов: *")
 
     class Meta:
         verbose_name = 'план'
@@ -122,11 +122,11 @@ class Plan(models.Model):
 
 
 class Program(models.Model):
-    author = models.ForeignKey(Teacher, verbose_name="Составитель", on_delete=models.CASCADE)
-    plan = models.ForeignKey(Plan, verbose_name="План", on_delete=models.CASCADE)
+    author = models.ForeignKey(Teacher, verbose_name="Составитель: *", on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, verbose_name="План: *", on_delete=models.CASCADE)
 
-    tema = models.CharField(verbose_name=u"Тема урока", max_length=30)
-    kol_ch = models.IntegerField(verbose_name=u"Количество часов")
+    tema = models.CharField(verbose_name=u"Тема урока: *", max_length=30)
+    kol_ch = models.IntegerField(verbose_name=u"Количество часов: *")
 
     class Meta:
         verbose_name = 'программа'
@@ -137,10 +137,10 @@ class Program(models.Model):
 
 
 class Student(models.Model):
-    klass = models.ForeignKey(Klass, verbose_name="Класс", on_delete=models.CASCADE)
+    klass = models.ForeignKey(Klass, verbose_name="Класс: *", on_delete=models.CASCADE)
 
-    fio_uch = models.CharField(verbose_name=u"ФИО ученика", max_length=50)
-    data_r = models.DateField(verbose_name=u"Дата рождения")
+    fio_uch = models.CharField(verbose_name=u"ФИО ученика: *", max_length=50)
+    data_r = models.DateField(verbose_name=u"Дата рождения: *")
 
     class Meta:
         verbose_name = 'ученик'
@@ -151,15 +151,15 @@ class Student(models.Model):
 
 
 class ClassbookNote(models.Model):
-    teacher = models.ForeignKey(Teacher, verbose_name="Учитель", on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, verbose_name="Ученик", on_delete=models.CASCADE)
-    program = models.ForeignKey(Program, verbose_name="Программа", on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, verbose_name="Учитель: *", on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, verbose_name="Ученик: *", on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, verbose_name="Программа: *", on_delete=models.CASCADE)
 
-    data_z = models.DateField(verbose_name="Дата занятия")
-    time_z = models.TimeField(verbose_name="Время занятия")
-    pris = models.CharField(max_length=20, verbose_name="Присутствие", choices=ATTENDANCE_OPTIONS, default='ATTEND')
-    oc = models.CharField(max_length=20, verbose_name="Оценка", choices=MARKS)
-    prim = models.CharField(max_length=250, verbose_name="Примечание")
+    data_z = models.DateField(verbose_name="Дата занятия: *")
+    time_z = models.TimeField(verbose_name="Время занятия: *")
+    pris = models.CharField(max_length=20, verbose_name="Присутствие: *", choices=ATTENDANCE_OPTIONS, default='ATTEND')
+    oc = models.CharField(max_length=20, verbose_name="Оценка: *", choices=MARKS)
+    prim = models.CharField(max_length=250, verbose_name="Примечание:", blank=True, null=True)
 
     class Meta:
         verbose_name = 'запись в журнале'

@@ -18,7 +18,7 @@ class ClassbookNoteForm(forms.ModelForm):
             'data_z': forms.TextInput(attrs={'class': 'form-control'}),
             'time_z': forms.TextInput(attrs={'class': 'form-control'}),
             'pris': forms.Select(attrs={'class': 'form-control'}),
-            'oc': forms.TextInput(attrs={'class': 'form-control'}),
+            'oc': forms.Select(attrs={'class': 'form-control'}),
             'prim': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
