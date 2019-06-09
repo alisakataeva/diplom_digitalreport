@@ -27,8 +27,9 @@ class KlassForm(forms.ModelForm):
 
     class Meta:
         model = Klass
-        fields = ['god_z', 'buk']
+        fields = ['teacher', 'god_z', 'buk']
         widgets = {
+            'teacher': forms.Select(attrs={'class': 'form-control'}),
             'god_z': forms.NumberInput(attrs={'class': 'form-control'}),
             'buk': forms.TextInput(attrs={'class': 'form-control'}),
         }

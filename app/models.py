@@ -29,7 +29,29 @@ SYSTEM_ROLES = (
 # Create your models here.
 
 
+class Teacher(models.Model):
+    fio_uchit = models.CharField(verbose_name=u"ФИО учителя: *", max_length=50)
+    dol = models.CharField(verbose_name=u"Должность: *", max_length=50, choices=SCHOOL_ROLES)
+    tel = models.CharField(verbose_name=u"Телефон: *", max_length=50)
+    mail = models.CharField(verbose_name=u"E-mail: *", max_length=50)
+    log = models.CharField(verbose_name=u"Логин: *", max_length=50)
+    par = models.CharField(verbose_name=u"Пароль: *", max_length=50)
+    tip = models.CharField(verbose_name=u"Тип пользователя: *", max_length=50, choices=SYSTEM_ROLES)
+
+    class Meta:
+        verbose_name = 'учитель'
+        verbose_name_plural = 'учителя'
+
+    def __str__(self):
+        return "<Учитель : %s>" % self.display()
+
+    def display(self):
+        return self.fio_uchit
+
+
 class Klass(models.Model):
+    teacher = models.ForeignKey(Teacher, verbose_name="Учитель: *", on_delete=models.CASCADE, null=True)
+
     god_z = models.IntegerField(verbose_name="Год зачисления: *")
     buk = models.CharField(max_length=1, verbose_name="Буква: *")
 
@@ -52,23 +74,6 @@ class Klass(models.Model):
 
     def get_students_count(self):
         return self.student_set.count()
-
-
-class Teacher(models.Model):
-    fio_uchit = models.CharField(verbose_name=u"ФИО учителя: *", max_length=50)
-    dol = models.CharField(verbose_name=u"Должность: *", max_length=50, choices=SCHOOL_ROLES)
-    tel = models.CharField(verbose_name=u"Телефон: *", max_length=50)
-    mail = models.CharField(verbose_name=u"E-mail: *", max_length=50)
-    log = models.CharField(verbose_name=u"Логин: *", max_length=50)
-    par = models.CharField(verbose_name=u"Пароль: *", max_length=50)
-    tip = models.CharField(verbose_name=u"Тип пользователя: *", max_length=50, choices=SYSTEM_ROLES)
-
-    class Meta:
-        verbose_name = 'учитель'
-        verbose_name_plural = 'учителя'
-
-    def __str__(self):
-        return "<Учитель : %s>" % self.fio_uchit
 
 
 class SchoolYear(models.Model):
@@ -115,7 +120,12 @@ class Plan(models.Model):
         verbose_name_plural = 'планы'
 
     def __str__(self):
-        return "<План : %s (%s)>" % ( self.display(), str( self.kol_ch ) )
+        return "<План : %s (Кол-во часов: %s, класс: %s, предмет: %s)>" % (
+            self.display(), 
+            str( self.kol_ch ), 
+            self.schoolyear.klass.get_number(),
+            self.subject.pred
+        )
 
     def display(self):
         return "%s - %s" % ( str( self.n_ob ), str( self.k_ob ) )
@@ -147,7 +157,10 @@ class Student(models.Model):
         verbose_name_plural = 'ученики'
 
     def __str__(self):
-        return "<Ученик : %s>" % self.fio_uch
+        return "<Ученик : %s>" % self.display()
+
+    def display(self):
+        return self.fio_uch
 
 
 class ClassbookNote(models.Model):
@@ -158,7 +171,7 @@ class ClassbookNote(models.Model):
     data_z = models.DateField(verbose_name="Дата занятия: *")
     time_z = models.TimeField(verbose_name="Время занятия: *")
     pris = models.CharField(max_length=20, verbose_name="Присутствие: *", choices=ATTENDANCE_OPTIONS, default='ATTEND')
-    oc = models.CharField(max_length=20, verbose_name="Оценка: *", choices=MARKS)
+    oc = models.CharField(max_length=20, verbose_name="Оценка:", choices=MARKS, blank=True, null=True)
     prim = models.CharField(max_length=250, verbose_name="Примечание:", blank=True, null=True)
 
     class Meta:
@@ -167,3 +180,6 @@ class ClassbookNote(models.Model):
 
     def __str__(self):
         return "<Запись в журнале : %s, %s %s>" % ( self.student.fio_uch, str( self.data_z ), str( self.time_z ) )
+
+    def get_subject(self):
+        return self.program.plan.subject.pred
