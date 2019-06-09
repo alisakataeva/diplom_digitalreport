@@ -4,4 +4,39 @@
 
 <h1>Отчет классного руководителя об успеваемости</h1>
 
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Период</th>
+      <th>ФИО учителя</th>
+      <th>Класс</th>
+      <th>Кол-во обучающихся</th>
+      <th>Отличники</th>
+      <th>Ударники</th>
+      <th>С 1 тройкой</th>
+      <th>Троечники</th>
+      <th>Неуспевающие</th>
+      <th>Качество знаний</th>
+      <th>% успеваемости</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, row in rows.items %}
+    <tr>
+      <td>{{ key }}</td>
+      <td>{{ row.data.teacher }}</td>
+      <td>{{ row.data.klass }}</td>
+      <td>{{ row.data.students_count }}</td>
+      <td>{{ row.data.agrade_students }}</td>
+      <td>{{ row.data.bgrade_students }}</td>
+      <td>{{ row.data.one_cgrade_students }}</td>
+      <td>{{ row.data.cgrade_students }}</td>
+      <td>{{ row.data.dgrade_students }}</td>
+      <td>{{ row.data.grades_quality }}</td>
+      <td>{{ row.data.grades_progress }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

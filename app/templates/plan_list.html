@@ -11,10 +11,11 @@
   <thead>
     <tr>
       <th>Составитель</th>
-      <th>Учебный год</th>
       <th>Класс</th>
+      <th>Учебный год</th>
       <th>Начало обучения</th>
       <th>Конец обучения</th>
+      <th>Предмет</th>
       <th>Количество часов</th>
       <th></th>
     </tr>
@@ -27,10 +28,11 @@
 
     <tr>
       <td>{{ object.author.fio_uchit }}</td>
-      <td>{{ object.schoolyear.display }}</td>
       <td>{{ object.schoolyear.klass.get_number }}</td>
+      <td>{{ object.schoolyear.display }}</td>
       <td>{{ object.n_ob }}</td>
       <td>{{ object.k_ob }}</td>
+      <td>{{ object.subject.pred }}</td>
       <td>{{ object.kol_ch }}</td>
       <td>
 

@@ -16,6 +16,7 @@ FORM = ClassbookNoteForm
 class ClassbookNoteList(ContextMixin, ListView):
     template_name = "classbooknote_list.html"
     model = MODEL
+    queryset = ClassbookNote.objects.all().order_by("data_z")
 
 
 class ClassbookNoteCreate(ContextMixin, CreateView):

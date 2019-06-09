@@ -10,13 +10,20 @@
 <table class="table table-bordered">
   <thead>
     <tr>
+
       <th colspan="2">Дата и время занятия</th>
+      <th>Предмет</th>
+      <th>Тема</th>
+
+      <th>Оценка</th>
+      <th>Присутствие</th>
+
       <th>Учитель</th>
       <th>Ученик</th>
-      <th>Присутствие</th>
-      <th>Оценка</th>
+
       <th>Примечание</th>
       <th></th>
+
     </tr>
   </thead>
   <tbody>
@@ -26,12 +33,18 @@
     {% url 'classbooknote_delete' pk=object.pk as delete_url %}
 
     <tr>
+
       <td>{{ object.data_z }}</td>
       <td>{{ object.time_z }}</td>
+      <td>{{ object.get_subject }}</td>
+      <td>{{ object.program.tema }}</td>
+
+      <td>{{ object.oc|default:"-" }}</td>
+      <td>{{ object.get_pris_display }}</td>
+
       <td>{{ object.teacher.fio_uchit }}</td>
       <td>{{ object.student.fio_uch }}</td>
-      <td>{{ object.get_pris_display }}</td>
-      <td>{{ object.oc }}</td>
+      
       <td>{{ object.prim|default:"-" }}</td>
       <td>
 

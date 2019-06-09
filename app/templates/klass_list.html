@@ -12,6 +12,7 @@
     <tr>
       <th>Класс</th>
       <th>Год зачисления</th>
+      <th>Классный руководитель</th>
       <th></th>
     </tr>
   </thead>
@@ -24,6 +25,7 @@
     <tr>
       <td>{{ object.get_number }}</td>
       <td>{{ object.god_z }}</td>
+      <td>{{ object.teacher.display|default:"(укажите классного руководителя)" }}</td>
       <td>
 
         {% if update_url %}
