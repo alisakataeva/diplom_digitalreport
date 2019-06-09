@@ -38,14 +38,14 @@ class Klass(models.Model):
         verbose_name_plural = 'классы'
 
     def __str__(self):
-        return "<Класс : %s, %s>" % ( str( self.god_z ), self.buk )
+        return "<Класс : %s" % self.get_number()
 
     def get_number(self):
         gap = datetime.today().year-self.god_z
         month = datetime.today().month
-        if gap > 11 or (gap == 11 and month > 5):
+        if gap > 11 or (gap == 11 and month > 8):
             return '(закончил школу)'
-        elif month < 6:
+        elif month < 9:
             return str( gap ) + self.buk
         else:
             return str( gap+1 ) + self.buk
