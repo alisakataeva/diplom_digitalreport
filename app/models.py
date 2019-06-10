@@ -135,7 +135,7 @@ class Program(models.Model):
     author = models.ForeignKey(Teacher, verbose_name="Составитель: *", on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, verbose_name="План: *", on_delete=models.CASCADE)
 
-    tema = models.CharField(verbose_name=u"Тема урока: *", max_length=30)
+    tema = models.CharField(verbose_name=u"Тема урока: *", max_length=100)
     kol_ch = models.IntegerField(verbose_name=u"Количество часов: *")
 
     class Meta:
