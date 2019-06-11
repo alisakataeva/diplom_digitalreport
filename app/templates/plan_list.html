@@ -25,6 +25,7 @@
 
     {% url 'plan_update' pk=object.pk as update_url %}
     {% url 'plan_delete' pk=object.pk as delete_url %}
+    {% with True as can_copy %}
 
     <tr>
       <td>{{ object.author.fio_uchit }}</td>
@@ -43,6 +44,13 @@
         </a>
         {% endif %}
 
+        {% if can_copy %}
+        <a class="btn btn-secondary" href="{{ create_url }}?next={{ request.path }}&makecopy_from={{ object.pk }}"
+        data-toggle="tooltip" data-placement="bottom" title="Копировать">
+          <i class="fa fa-copy"></i>
+        </a>
+        {% endif %}
+
         {% if delete_url %}
         <a class="btn btn-danger" href="{{ delete_url }}?next={{ request.path }}"
           data-toggle="tooltip" data-placement="bottom" title="Удалить">
@@ -52,6 +60,8 @@
 
       </td>
     </tr>
+
+    {% endwith %}
     {% endfor %}
   </tbody>
 </table>
