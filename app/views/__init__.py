@@ -1,4 +1,4 @@
-from .base import IndexView
+from .base import IndexView, LoginView, logout
 
 from .classbooknote import ClassbookNoteList, ClassbookNoteCreate, ClassbookNoteUpdate, ClassbookNoteDelete
 from .klass import KlassList, KlassCreate, KlassUpdate, KlassDelete

@@ -102,10 +102,12 @@ class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
-        fields = ['fio_uchit', 'dol', 'tel', 'mail']
+        fields = ['fio_uchit', 'dol', 'tel', 'mail', 'log', 'par']
         widgets = {
             'fio_uchit': forms.TextInput(attrs={'class': 'form-control'}),
             'dol': forms.Select(attrs={'class': 'form-control'}),
             'tel': forms.TextInput(attrs={'class': 'form-control'}),
             'mail': forms.TextInput(attrs={'class': 'form-control'}),
+            'log': forms.TextInput(attrs={'class': 'form-control'}),
+            'par': forms.TextInput(attrs={'class': 'form-control'}),
         }

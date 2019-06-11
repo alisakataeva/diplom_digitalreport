@@ -3,7 +3,8 @@
 {% block body %}
 
 <nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" href="#">Гибкий генератор цифровой отчетности образовательного учреждения</a>
+  <a class="navbar-brand" href="/">Гибкий генератор цифровой отчетности образовательного учреждения</a>
+  <a href="/logout" class="btn btn-light">Выйти</a>
 </nav>
 
 <br />
@@ -14,6 +15,15 @@
 
       <nav class="nav nav-pills flex-column">
 
+        <div class="alert alert-primary" style="font-size: .85em">
+          <i class="fa fa-user" style="margin-right: 16px;"></i> 
+          Добро пожаловать, <strong>{% if current_teacher %}{{ current_teacher.display }}{% else %}(неизвестный пользователь){% endif %}</strong>
+
+          {% if current_klass %}
+          <br />
+          Класс: <strong>{{ current_klass.get_number }}</strong>
+          {% endif %}
+        </div>
 
         <a class="nav-link disabled" href="#" style="background-color: #efefef;">Года и планы:</a>
 
@@ -98,7 +108,13 @@
 
     </div>
     <div class="col">
-      {% block content %}{% endblock %}
+      {% block content %}
+
+      <div class="jumbotron">
+        <h3>Гибкий генератор цифровой отчетности образовательного учреждения</h3>
+      </div>
+      
+      {% endblock %}
     </div>
   </div>
 </div>
