@@ -75,7 +75,7 @@ class StudyResultsReportView(ContextMixin, TemplateView):
             hours = plan.kol_ch
             used = ClassbookNote.objects.filter(program__plan=plan).count()
             plan.used_hours = used
-            plan.hours_diff = hours - used
+            plan.hours_diff = used - hours
 
         context['rows'] = plans
 
