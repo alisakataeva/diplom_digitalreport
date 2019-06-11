@@ -108,10 +108,14 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         log = ''
 
         for key, chunk in result_plans.items():
+    
+            teacher = "(кл.руководителя нет)"
+            if plans.first().schoolyear.klass.teacher:
+                teacher = plans.first().schoolyear.klass.teacher.display()
 
             chunk_data = {
 
-                'teacher': plans.first().schoolyear.klass.teacher.display(),
+                'teacher': teacher,
                 'klass': plans.first().schoolyear.klass.get_number(),
                 'students_count': plans.first().schoolyear.klass.get_students_count(),
 
@@ -208,9 +212,13 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
         for key, chunk in result_plans.items():
 
+            teacher = "(кл.руководителя нет)"
+            if klass.teacher:
+                teacher = klass.teacher.display()
+
             chunk_data = {
 
-                'teacher': klass.teacher.display(),
+                'teacher': teacher,
                 'klass': klass.get_number(),
                 'students_count': klass.get_students_count(),
                 'students': {},
