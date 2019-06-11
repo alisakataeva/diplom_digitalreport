@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
+from django.forms.models import model_to_dict
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
 from app.models import Plan
@@ -22,6 +23,13 @@ class PlanCreate(ContextMixin, CreateView):
     template_name = CREATE_TEMPLATE
     model = MODEL
     form_class = FORM
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.GET.get('makecopy_from'):
+            instance = Plan.objects.get(pk=int( self.request.GET.get('makecopy_from') ))
+            context['form'] = PlanForm(initial=model_to_dict(instance))
+        return context
 
     def get_success_url(self, **kwargs):
         return reverse('plan_list')
