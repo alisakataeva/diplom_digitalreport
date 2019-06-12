@@ -55,8 +55,12 @@ class StudyLevelReportView(ContextMixin, TemplateView):
                     pass
 
             plan.marks = marks
-            plan.grades_quality = (marks[5] + marks[4]) / students_count * 100
-            plan.grades_progress = (students_count - marks[2]) / students_count * 100
+            if students_count > 0:
+                plan.grades_quality = (marks[5] + marks[4]) / students_count * 100
+                plan.grades_progress = (students_count - marks[2]) / students_count * 100
+            else:
+                plan.grades_quality = 0
+                plan.grades_progress = 0
 
         context['rows'] = plans
 
