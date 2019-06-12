@@ -87,7 +87,7 @@ class SchoolYear(models.Model):
         verbose_name_plural = 'учебные года'
 
     def __str__(self):
-        return "<Учебный год : %s>" % self.display()
+        return "<Учебный год : %s (Класс: %s)>" % ( self.display(), self.klass.get_number() )
 
     def display(self):
         return "%s - %s" % ( str( self.nach_g ), str( self.kon_g ) ) 
