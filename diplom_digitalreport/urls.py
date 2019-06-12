@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('', login_required(views.IndexView.as_view()), name='index'),
     path('login/', views.LoginView.as_view(), name="login"),
+    path('signup/', views.SignupView.as_view(), name="signup"),
     path('logout/', views.logout, name="logout"),
 
     path('classbooknotes', login_required(views.ClassbookNoteList.as_view()), name='classbooknote_list'),

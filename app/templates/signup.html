@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<style>
+  html { background: #eee }
+  .error { font-size: 80%; color: #dc3545; margin-bottom: 12px; }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron">
+  <div class="container" style="margin-top: 80px; display: flex; justify-content: center;">
+    <div class="list-group">
+      <div class="list-group-item">
+
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="list-group" style="width: 400px">
+              
+              {% if error %}
+              <div class="error">
+                {{ error }}
+              </div>
+              {% endif %}
+      
+              <div class="form-group row">
+                <label for="form_name" class="col-sm-4 col-form-label">ФИО: *</label>
+                <div class="col-sm-8">
+                  <input id="form_name" type="text" class="form-control" name="name" />
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_role" class="col-sm-4 col-form-label">Должность: *</label>
+                <div class="col-sm-8">
+                  <select name="role" id="form_role" class="form-control">
+                    <option value="TEACHER">Учитель</option>
+                    <option value="VICE_PRINCIPAL">Завуч</option>
+                  </select>
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_phone" class="col-sm-4 col-form-label">Телефон: *</label>
+                <div class="col-sm-8">
+                  <input id="form_phone" type="text" class="form-control" name="phone" />
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_email" class="col-sm-4 col-form-label">E-mail: *</label>
+                <div class="col-sm-8">
+                  <input id="form_email" type="email" class="form-control" name="email" />
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_login" class="col-sm-4 col-form-label">Логин: *</label>
+                <div class="col-sm-8">
+                  <input id="form_login" type="text" class="form-control" name="login" />
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_password" class="col-sm-4 col-form-label">Пароль: *</label>
+                <div class="col-sm-8">
+                  <input id="form_password" type="text" class="form-control" name="password" />
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                <label for="form_role" class="col-sm-4 col-form-label">Тип пользователя:</label>
+                <div class="col-sm-8">
+                  <select name="system_role" id="form_role" class="form-control">
+                    <option value="USER">Пользователь</option>
+                    <option value="ADMIN">Администратор</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="btn-group" role="group" aria-label="Basic example">
+      
+                <button class="btn btn-primary">Зарегестрироваться</button>
+                <a class="btn btn-light" href="{% url 'login' %}">Войти</a>
+
+              </div>
+      
+            </div>
+          </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

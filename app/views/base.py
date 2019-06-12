@@ -46,6 +46,50 @@ class LoginView(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
+class SignupView(TemplateView):
+    template_name = 'signup.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+
+            name = self.request.POST.get('name')
+            phone = self.request.POST.get('phone')
+            email = self.request.POST.get('email')
+            login = self.request.POST.get('login')
+            password = self.request.POST.get('password')
+
+            if not name or not phone or not email or not login or not password:
+                ctx['error'] = 'Введите все данные.'
+            
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+
+        name = self.request.POST.get('name')
+        role = self.request.POST.get('role')
+        phone = self.request.POST.get('phone')
+        email = self.request.POST.get('email')
+        login = self.request.POST.get('login')
+        password = self.request.POST.get('password')
+        system_role = self.request.POST.get('system_role')
+
+        if name and phone and email and login and password:
+            teacher = Teacher.objects.create(
+                fio_uchit=name,
+                dol=role,
+                tel=phone,
+                mail=email,
+                log=login,
+                par=password,
+                tip=system_role
+            )
+            request.session['current_teacher_id'] = teacher.pk
+            return redirect('/')
+
+        return super().get(request, *args, **kwargs)
+
+
 def logout(request):
     request.session.flush()
     return redirect('/')
