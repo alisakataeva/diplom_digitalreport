@@ -13,20 +13,26 @@ class ContextMixin:
 
         kwargs['current_teacher'] = None
         kwargs['current_klass'] = None
+        kwargs['system_role'] = None
 
         if self.request.session.get("current_teacher_id"):
 
             try:
-                kwargs['current_teacher'] = Teacher.objects.get(pk=int( self.request.session.get("current_teacher_id") ))
+                user = Teacher.objects.get(pk=int( self.request.session.get("current_teacher_id") ))
             except Teacher.DoesNotExist:
                 pass
 
-            if kwargs['current_teacher']:
+            if user:
+                kwargs['current_teacher'] = user
+                if user.dol == 'TEACHER':
+                    kwargs['system_role'] = 'teacher'
+                elif user.dol == 'VICE_PRINCIPAL':
+                    kwargs['system_role'] = 'vice_principal'
                 try:
-                    kwargs['current_klass'] = Klass.objects.get(teacher=kwargs['current_teacher'])
+                    kwargs['current_klass'] = Klass.objects.get(teacher=user)
                 except Klass.DoesNotExist:
                     pass
 
-        # assert False, kwargs['current_teacher']
+        kwargs['current_teacher'] = user
 
         return super(ContextMixin, self).get_context_data(**kwargs)

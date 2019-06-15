@@ -25,6 +25,8 @@
           {% endif %}
         </div>
 
+        {% if system_role == 'vice_principal' %}
+
         <a class="nav-link disabled" href="#" style="background-color: #efefef;">Года и планы:</a>
 
         {% url 'schoolyear_list' as page_url %}
@@ -54,6 +56,8 @@
 
 
         <a href="" class="dropdown-divider"></a>
+
+        {% endif %}
 
 
         {% url 'program_list' as page_url %}
@@ -91,6 +95,8 @@
         {% url 'report_klass_attendance' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет классного руководителя о посещаемости</a>
 
+        {% if system_role == 'vice_principal' %}
+
         {% url 'report_total_study_results' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о прохождении учебного материала</a>
 
@@ -100,9 +106,9 @@
         {% url 'report_total_attendance' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о посещаемости</a>
 
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}"></a>
+        {% endif %}
+
+       <br /><br /><br />
 
       </nav>
 

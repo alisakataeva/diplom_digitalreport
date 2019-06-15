@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -8,6 +10,7 @@ from app.mixins import ContextMixin
 # Create your views here.
 
 
+# Прохождение учебного материала
 class StudyResultsReportView(ContextMixin, TemplateView):
     template_name = "reports/study_results.html"
 
@@ -15,6 +18,31 @@ class StudyResultsReportView(ContextMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         plans = Plan.objects.all()
+
+        # START Filtering
+
+        all_periods = []
+
+        for plan in plans:
+            if (plan.n_ob, plan.k_ob) not in all_periods:
+                all_periods.append((plan.n_ob, plan.k_ob))
+
+        selected_period = self.request.GET.get('period')
+        if selected_period:
+            try:
+                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                start = datetime.strptime(start, '%Y-%m-%d')
+                end = datetime.strptime(end, '%Y-%m-%d')
+
+                plans = plans.filter(n_ob=start, k_ob=end)
+            except Exception as e:
+                pass
+
+        context['periods'] = all_periods
+
+        # END Filtering
+
         for plan in plans:
             hours = plan.kol_ch
             used = ClassbookNote.objects.filter(program__plan=plan).count()
@@ -34,6 +62,31 @@ class StudyLevelReportView(ContextMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         plans = Plan.objects.all().order_by("n_ob")
+
+        # START Filtering
+
+        all_periods = []
+
+        for plan in plans:
+            if (plan.n_ob, plan.k_ob) not in all_periods:
+                all_periods.append((plan.n_ob, plan.k_ob))
+
+        selected_period = self.request.GET.get('period')
+        if selected_period:
+            try:
+                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                start = datetime.strptime(start, '%Y-%m-%d')
+                end = datetime.strptime(end, '%Y-%m-%d')
+
+                plans = plans.filter(n_ob=start, k_ob=end)
+            except Exception as e:
+                pass
+
+        context['periods'] = all_periods
+
+        # END Filtering
+        
         for plan in plans:
 
             lessons = ClassbookNote.objects.filter(program__plan=plan)
@@ -67,29 +120,6 @@ class StudyLevelReportView(ContextMixin, TemplateView):
         return context
 
 
-# Прохождение учебного материала
-class StudyResultsReportView(ContextMixin, TemplateView):
-    template_name = "reports/study_results.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        plans = Plan.objects.all()
-        for plan in plans:
-            hours = plan.kol_ch
-            distinct_used = []
-            all_used = ClassbookNote.objects.filter(program__plan=plan)
-            for lsn in all_used:
-                if (lsn.data_z, lsn.time_z) not in distinct_used:
-                    distinct_used.append((lsn.data_z, lsn.time_z))
-            plan.used_hours = len(distinct_used)
-            plan.hours_diff = len(distinct_used) - hours
-
-        context['rows'] = plans
-
-        return context
-
-
 # Отчет кл.рук. об успеваемости
 class KlassStudyLevelReportView(ContextMixin, TemplateView):
     template_name = "reports/klass_study_level.html"
@@ -99,6 +129,31 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
         # TODO -> отфильтровать по классу, когда в системе появится роль кл.рук
         plans = Plan.objects.all().order_by("n_ob")
+
+        # START Filtering
+
+        all_periods = []
+
+        for plan in plans:
+            if (plan.n_ob, plan.k_ob) not in all_periods:
+                all_periods.append((plan.n_ob, plan.k_ob))
+
+        selected_period = self.request.GET.get('period')
+        if selected_period:
+            try:
+                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                start = datetime.strptime(start, '%Y-%m-%d')
+                end = datetime.strptime(end, '%Y-%m-%d')
+
+                plans = plans.filter(n_ob=start, k_ob=end)
+            except Exception as e:
+                pass
+
+        context['periods'] = all_periods
+
+        # END Filtering
+
         result_plans = {}
 
         for plan in plans:
@@ -200,6 +255,31 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
         # TODO -> отфильтровать по классу, когда в системе появится роль кл.рук
         plans = Plan.objects.all().order_by("n_ob")
+
+        # START Filtering
+
+        all_periods = []
+
+        for plan in plans:
+            if (plan.n_ob, plan.k_ob) not in all_periods:
+                all_periods.append((plan.n_ob, plan.k_ob))
+
+        selected_period = self.request.GET.get('period')
+        if selected_period:
+            try:
+                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                start = datetime.strptime(start, '%Y-%m-%d')
+                end = datetime.strptime(end, '%Y-%m-%d')
+
+                plans = plans.filter(n_ob=start, k_ob=end)
+            except Exception as e:
+                pass
+
+        context['periods'] = all_periods
+
+        # END Filtering
+        
         result_plans = {}
 
         klass = plans.first().schoolyear.klass
