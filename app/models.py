@@ -26,6 +26,14 @@ SYSTEM_ROLES = (
     ('USER', 'Пользователь'),
 )
 
+GRADE_INFO = (
+    ('1', '1 четверть'),
+    ('2', '2 четверть'),
+    ('3', '3 четверть'),
+    ('4', '4 четверть'),
+    ('YEAR', 'Год'),
+)
+
 # Create your models here.
 
 
@@ -172,7 +180,7 @@ class ClassbookNote(models.Model):
     time_z = models.TimeField(verbose_name="Время занятия: *")
     pris = models.CharField(max_length=20, verbose_name="Присутствие: *", choices=ATTENDANCE_OPTIONS, default='ATTEND')
     oc = models.CharField(max_length=20, verbose_name="Оценка:", choices=MARKS, blank=True, null=True)
-    prim = models.CharField(max_length=250, verbose_name="Примечание:", blank=True, null=True)
+    prim = models.CharField(max_length=5, verbose_name="Примечание:", choices=GRADE_INFO, blank=True, null=True)
 
     class Meta:
         verbose_name = 'запись в журнале'
