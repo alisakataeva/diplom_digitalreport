@@ -43,13 +43,27 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         # END Filtering
 
+        total_hours = 0
+        total_used = 0
+        total_diff = 0
+
         for plan in plans:
+
             hours = plan.kol_ch
             used = ClassbookNote.objects.filter(program__plan=plan).count()
+            diff = used - hours
+
+            total_hours += hours
+            total_used += used
+            total_diff += diff
+
             plan.used_hours = used
-            plan.hours_diff = used - hours
+            plan.hours_diff = diff
 
         context['rows'] = plans
+        context['total_hours'] = total_hours
+        context['total_used'] = total_used
+        context['total_diff'] = total_diff
 
         return context
 
@@ -86,12 +100,22 @@ class StudyLevelReportView(ContextMixin, TemplateView):
         context['periods'] = all_periods
 
         # END Filtering
+
+        total = {
+            5: 0,
+            4: 0,
+            3: 0,
+            2: 0,
+            'students': 0
+        }
         
         for plan in plans:
 
             lessons = ClassbookNote.objects.filter(program__plan=plan)
             klass = plan.schoolyear.klass
             students_count = klass.student_set.all().count()
+
+            total['students'] += students_count
 
             marks = {
                 5: 0,
@@ -105,6 +129,7 @@ class StudyLevelReportView(ContextMixin, TemplateView):
                     period = int( lsn.prim )
                     mark = int( lsn.oc )
                     marks[mark] += 1
+                    total[mark] += 1
                 except:
                     pass
 
@@ -117,6 +142,12 @@ class StudyLevelReportView(ContextMixin, TemplateView):
                 plan.grades_progress = 0
 
         context['rows'] = plans
+        context['total_5'] = total[5]
+        context['total_4'] = total[4]
+        context['total_3'] = total[3]
+        context['total_2'] = total[2]
+        context['total_quality'] = (total[5] + total[4]) / total['students'] * 100
+        context['total_progress'] = (total['students'] - total[2]) / total['students'] * 100
 
         return context
 
@@ -167,11 +198,38 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
         log = ''
 
+        total_grades = {
+            5: 0,
+            4: 0,
+            3: 0,
+            2: 0,
+        }
+
+        total_data = {
+            'students_count': 0,
+
+            'agrade_students': 0,
+            'bgrade_students': 0,
+            'one_cgrade_students': 0,
+            'cgrade_students': 0,
+            'dgrade_students': 0,
+
+            'grades_quality': 0,
+            'grades_progress': 0
+        }
+
         for key, chunk in result_plans.items():
     
             teacher = "(кл.руководителя нет)"
             if plans.first().schoolyear.klass.teacher:
                 teacher = plans.first().schoolyear.klass.teacher.display()
+
+            all_marks = {
+                5: 0,
+                4: 0,
+                3: 0,
+                2: 0,
+            }
 
             chunk_data = {
 
@@ -190,12 +248,7 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
             }
 
-            all_marks = {
-                5: 0,
-                4: 0,
-                3: 0,
-                2: 0,
-            }
+            total_data['students_count'] += chunk_data['students_count']
 
             students_marks = {}
 
@@ -215,35 +268,40 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
                         period = int( lsn.prim )
                         students_marks[lsn.student.pk][int( lsn.oc )] += 1
                         all_marks[int( lsn.oc )] += 1
-                        log += "students_marks[%s][int( %s )] += 1\n" % (
-                            str( lsn.student.pk ),
-                            str( lsn.oc )
-                        )
-                        log += "%s\n" % str( students_marks )
+                        total_grades[int( lsn.oc )] += 1
                     except Exception as e:
-                        log += "%s\n" % e
                         pass
 
             for student_id, marks in students_marks.items():
                 if marks[2] > 0:
                     chunk_data['dgrade_students'] += 1
+                    total_data['dgrade_students'] += 1
                 elif marks[3] > 1:
                     chunk_data['cgrade_students'] += 1
+                    total_data['cgrade_students'] += 1
                 elif marks[3] == 1:
                     chunk_data['one_cgrade_students'] += 1
+                    total_data['one_cgrade_students'] += 1
                 elif marks[4] > 0:
                     chunk_data['bgrade_students'] += 1
+                    total_data['bgrade_students'] += 1
                 elif marks[5] > 0:
                     chunk_data['agrade_students'] += 1
+                    total_data['agrade_students'] += 1
 
             chunk_data['grades_quality'] = (all_marks[5] + all_marks[4]) / chunk_data['students_count'] * 100
             chunk_data['grades_progress'] = (chunk_data['students_count'] - all_marks[2]) / chunk_data['students_count'] * 100
 
             chunk['data'] = chunk_data
 
-        # assert False, result_plans  
-
         context['rows'] = result_plans
+        context['total_agrade_students'] = total_data['agrade_students']
+        context['total_bgrade_students'] = total_data['bgrade_students']
+        context['total_one_cgrade_students'] = total_data['one_cgrade_students']
+        context['total_cgrade_students'] = total_data['cgrade_students']
+        context['total_dgrade_students'] = total_data['dgrade_students']
+        context['total_grades_quality'] = (total_grades[5] + total_grades[4]) / total_data['students_count'] * 100
+        context['total_grades_progress'] = (total_data['students_count'] - total_grades[2]) / total_data['students_count'] * 100
 
         return context
 
@@ -295,6 +353,13 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
         log = ''
 
+        total_data = {
+            'skips_desease': 0,
+            'skips_reasonable': 0,
+            'skips': 0,
+            'all_skips': 0,
+        }
+
         for key, chunk in result_plans.items():
 
             teacher = "(кл.руководителя нет)"
@@ -343,15 +408,24 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
             for student in chunk_data['students'].values():
                 chunk_data['total_skips_desease'] += student['skips_desease']
+                total_data['skips_desease'] += student['skips_desease']
+
                 chunk_data['total_skips_reasonable'] += student['skips_reasonable']
+                total_data['skips_reasonable'] += student['skips_reasonable']
+
                 chunk_data['total_skips'] += student['skips']
+                total_data['skips'] += student['skips']
+
                 chunk_data['total_all_skips'] += student['all_skips']
+                total_data['all_skips'] += student['all_skips']
 
             chunk['data'] = chunk_data
 
-        # assert False, log  
-
         context['rows'] = result_plans
+        context['total_skips_desease'] = total_data['skips_desease']
+        context['total_skips_reasonable'] = total_data['skips_reasonable']
+        context['total_skips'] = total_data['skips']
+        context['total_all_skips'] = total_data['all_skips']
 
         return context
 

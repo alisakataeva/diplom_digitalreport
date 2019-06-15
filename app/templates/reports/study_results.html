@@ -30,6 +30,14 @@
       <td>{{ row.hours_diff }}</td>
     </tr>
     {% endfor %}
+
+    <tr class="table-primary">
+      <td colspan="4" class="text-right">Итог:</td>
+      <td>{{ total_hours }}</td>
+      <td>{{ total_used }}</td>
+      <td>{{ total_diff }}</td>
+    </tr>
+
   </tbody>
 </table>
 

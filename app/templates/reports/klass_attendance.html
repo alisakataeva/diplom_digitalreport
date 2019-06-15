@@ -44,8 +44,8 @@
 
       {% endfor %}
 
-      <tr class="table-success">
-        <td>Итог</td>
+      <tr class="table-warning">
+        <td class="text-right">Общее кол-во:</td>
         <td>{{ row.data.total_skips_desease }}</td>
         <td>{{ row.data.total_skips_reasonable }}</td>
         <td>{{ row.data.total_skips }}</td>
@@ -53,6 +53,15 @@
       </tr>
 
     {% endfor %}
+
+    <tr class="table-primary">
+      <td colspan="4" class="text-right">Итог:</td>
+      <td>{{ total_skips_desease }}</td>
+      <td>{{ total_skips_reasonable }}</td>
+      <td>{{ total_skips }}</td>
+      <td>{{ total_all_skips }}</td>
+    </tr>
+    
   </tbody>
 </table>
 
