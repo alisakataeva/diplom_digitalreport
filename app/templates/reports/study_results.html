@@ -11,6 +11,7 @@
     <tr>
       <th>Период</th>
       <th>ФИО учителя</th>
+      <th>Класс</th>
       <th>Предмет</th>
       <th>Кол-во часов по плану</th>
       <th>Кол-во выданных часов</th>
@@ -22,6 +23,7 @@
     <tr>
       <td>{{ row.display }}</td>
       <td>{{ row.author.fio_uchit }}</td>
+      <td>{{ row.schoolyear.klass.get_number }}</td>
       <td>{{ row.subject.pred }}</td>
       <td>{{ row.kol_ch }}</td>
       <td>{{ row.used_hours }}</td>
