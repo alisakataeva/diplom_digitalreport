@@ -102,6 +102,7 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
             for lsn in lessons:
                 try:
+                    period = int( lsn.prim )
                     mark = int( lsn.oc )
                     marks[mark] += 1
                 except:
