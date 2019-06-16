@@ -19,6 +19,9 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all()
 
+        if context['current_klass']:
+            plans = plans.filter(schoolyear__klass=context['current_klass'])
+
         # START Filtering
 
         all_periods = []
@@ -77,6 +80,9 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all().order_by("n_ob")
 
+        if context['current_klass']:
+            plans = plans.filter(schoolyear__klass=context['current_klass'])
+
         # START Filtering
 
         all_periods = []
@@ -134,6 +140,7 @@ class StudyLevelReportView(ContextMixin, TemplateView):
                     pass
 
             plan.marks = marks
+
             if students_count > 0:
                 plan.grades_quality = (marks[5] + marks[4]) / students_count * 100
                 plan.grades_progress = (students_count - marks[2]) / students_count * 100
@@ -146,8 +153,13 @@ class StudyLevelReportView(ContextMixin, TemplateView):
         context['total_4'] = total[4]
         context['total_3'] = total[3]
         context['total_2'] = total[2]
-        context['total_quality'] = (total[5] + total[4]) / total['students'] * 100
-        context['total_progress'] = (total['students'] - total[2]) / total['students'] * 100
+
+        if total['students'] > 0:
+            context['total_quality'] = (total[5] + total[4]) / total['students'] * 100
+            context['total_progress'] = (total['students'] - total[2]) / total['students'] * 100
+        else:
+            context['total_quality'] = 0
+            context['total_progress'] = 0
 
         return context
 
@@ -159,8 +171,10 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # TODO -> отфильтровать по классу, когда в системе появится роль кл.рук
         plans = Plan.objects.all().order_by("n_ob")
+
+        if context['current_klass']:
+            plans = plans.filter(schoolyear__klass=context['current_klass'])
 
         # START Filtering
 
@@ -289,8 +303,12 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
                     chunk_data['agrade_students'] += 1
                     total_data['agrade_students'] += 1
 
-            chunk_data['grades_quality'] = (all_marks[5] + all_marks[4]) / chunk_data['students_count'] * 100
-            chunk_data['grades_progress'] = (chunk_data['students_count'] - all_marks[2]) / chunk_data['students_count'] * 100
+            if chunk_data['students_count'] > 0:
+                chunk_data['grades_quality'] = (all_marks[5] + all_marks[4]) / chunk_data['students_count'] * 100
+                chunk_data['grades_progress'] = (chunk_data['students_count'] - all_marks[2]) / chunk_data['students_count'] * 100
+            else:
+                chunk_data['grades_quality'] = 0
+                chunk_data['grades_progress'] = 0
 
             chunk['data'] = chunk_data
 
@@ -300,8 +318,13 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         context['total_one_cgrade_students'] = total_data['one_cgrade_students']
         context['total_cgrade_students'] = total_data['cgrade_students']
         context['total_dgrade_students'] = total_data['dgrade_students']
-        context['total_grades_quality'] = (total_grades[5] + total_grades[4]) / total_data['students_count'] * 100
-        context['total_grades_progress'] = (total_data['students_count'] - total_grades[2]) / total_data['students_count'] * 100
+
+        if total_data['students_count'] > 0:
+            context['total_grades_quality'] = (total_grades[5] + total_grades[4]) / total_data['students_count'] * 100
+            context['total_grades_progress'] = (total_data['students_count'] - total_grades[2]) / total_data['students_count'] * 100
+        else:
+            context['total_grades_quality'] = 0
+            context['total_grades_progress'] = 0
 
         return context
 
@@ -312,8 +335,9 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # TODO -> отфильтровать по классу, когда в системе появится роль кл.рук
         plans = Plan.objects.all().order_by("n_ob")
+        if context['current_klass']:
+            plans = plans.filter(schoolyear__klass=context['current_klass'])
 
         # START Filtering
 
@@ -341,7 +365,8 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
         
         result_plans = {}
 
-        klass = plans.first().schoolyear.klass
+        if plans:
+            klass = plans.first().schoolyear.klass
 
         for plan in plans:
 
@@ -350,8 +375,6 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
             if not result_plans.get(period):
                 result_plans[period] = { 'objects': [] }
             result_plans[period]['objects'].append( plan )
-
-        log = ''
 
         total_data = {
             'skips_desease': 0,
@@ -391,7 +414,7 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
                 }
 
             for plan in chunk['objects']:
-                lessons = ClassbookNote.objects.filter(program__plan=plan)
+                lessons = ClassbookNote.objects.filter(program__plan=plan, student__klass=klass)
 
                 for lsn in lessons:
                     attendance = lsn.pris
@@ -403,7 +426,6 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
                         elif attendance == 'WAS_ILL':
                             chunk_data['students'][lsn.student.pk]['skips_desease'] += 1
 
-                        log += '%s\n' % attendance
                         chunk_data['students'][lsn.student.pk]['all_skips'] += 1
 
             for student in chunk_data['students'].values():
