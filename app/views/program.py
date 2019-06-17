@@ -17,6 +17,13 @@ FORM = ProgramForm
 class ProgramList(ContextMixin, ListView):
     template_name = "program_list.html"
     model = MODEL
+    queryset = Program.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context.get('current_klass'):
+            context['object_list'] = self.queryset.filter(plan__schoolyear__klass=context.get('current_klass'))
+        return context
 
 
 class ProgramCreate(ContextMixin, CreateView):

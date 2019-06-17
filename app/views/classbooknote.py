@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
-from app.models import ClassbookNote
+from app.models import ClassbookNote, Klass
 from app.forms import ClassbookNoteForm
 from app.mixins import ContextMixin
 from app.const import CREATE_TEMPLATE, UPDATE_TEMPLATE, DELETE_TEMPLATE
@@ -18,6 +18,12 @@ class ClassbookNoteList(ContextMixin, ListView):
     template_name = "classbooknote_list.html"
     model = MODEL
     queryset = ClassbookNote.objects.all().order_by("data_z")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context.get('current_klass'):
+            context['object_list'] = self.queryset.filter(student__klass=context.get('current_klass'))
+        return context
 
 
 class ClassbookNoteCreate(ContextMixin, CreateView):

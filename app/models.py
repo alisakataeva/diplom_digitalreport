@@ -151,7 +151,10 @@ class Program(models.Model):
         verbose_name_plural = 'программы'
 
     def __str__(self):
-        return "<Программа : %s>" % self.tema
+        return "<Программа : %s>" % self.display()
+
+    def display(self):
+        return "%s (Класс: %s, план: %s, предмет: %s)" % ( self.tema, self.plan.schoolyear.klass.get_number(), self.plan.display(), self.plan.subject.pred )
 
 
 class Student(models.Model):
