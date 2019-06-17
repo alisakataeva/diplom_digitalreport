@@ -165,7 +165,7 @@ class Student(models.Model):
         verbose_name_plural = 'ученики'
 
     def __str__(self):
-        return "<Ученик : %s>" % self.display()
+        return "<Ученик : %s (%s)>" % ( self.display(), self.klass.get_number() )
 
     def display(self):
         return self.fio_uch
