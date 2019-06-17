@@ -4,52 +4,57 @@
 
 <h1>Отчет классного руководителя об успеваемости</h1>
 
-{% include 'common/report_filtering.html' %}
+{% include 'common/report_top.html' %}
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Период</th>
-      <th>ФИО учителя</th>
-      <th>Класс</th>
-      <th>Кол-во обучающихся</th>
-      <th>Отличники</th>
-      <th>Ударники</th>
-      <th>С 1 тройкой</th>
-      <th>Троечники</th>
-      <th>Неуспевающие</th>
-      <th>Качество знаний</th>
-      <th>% успеваемости</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for key, row in rows.items %}
-    <tr>
-      <td>{{ key }}</td>
-      <td>{{ row.data.teacher }}</td>
-      <td>{{ row.data.klass }}</td>
-      <td>{{ row.data.students_count }}</td>
-      <td>{{ row.data.agrade_students }}</td>
-      <td>{{ row.data.bgrade_students }}</td>
-      <td>{{ row.data.one_cgrade_students }}</td>
-      <td>{{ row.data.cgrade_students }}</td>
-      <td>{{ row.data.dgrade_students }}</td>
-      <td>{{ row.data.grades_quality }}</td>
-      <td>{{ row.data.grades_progress }}</td>
-    </tr>
-    {% endfor %}
+<div id="printed">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Период</th>
+          <th>ФИО учителя</th>
+          <th>Класс</th>
+          <th>Кол-во обучающихся</th>
+          <th>Отличники</th>
+          <th>Ударники</th>
+          <th>С 1 тройкой</th>
+          <th>Троечники</th>
+          <th>Неуспевающие</th>
+          <th>Качество знаний</th>
+          <th>% успеваемости</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, row in rows.items %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ row.data.teacher }}</td>
+          <td>{{ row.data.klass }}</td>
+          <td>{{ row.data.students_count }}</td>
+          <td>{{ row.data.agrade_students }}</td>
+          <td>{{ row.data.bgrade_students }}</td>
+          <td>{{ row.data.one_cgrade_students }}</td>
+          <td>{{ row.data.cgrade_students }}</td>
+          <td>{{ row.data.dgrade_students }}</td>
+          <td>{{ row.data.grades_quality }}</td>
+          <td>{{ row.data.grades_progress }}</td>
+        </tr>
+        {% endfor %}
+    
+        <tr class="table-primary">
+          <td colspan="4" class="text-right">Итог:</td>
+          <td>{{ total_agrade_students }}</td>
+          <td>{{ total_bgrade_students }}</td>
+          <td>{{ total_one_cgrade_students }}</td>
+          <td>{{ total_cgrade_students }}</td>
+          <td>{{ total_dgrade_students }}</td>
+          <td>{{ total_grades_quality }}</td>
+          <td>{{ total_grades_progress }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <tr class="table-primary">
-      <td colspan="4" class="text-right">Итог:</td>
-      <td>{{ total_agrade_students }}</td>
-      <td>{{ total_bgrade_students }}</td>
-      <td>{{ total_one_cgrade_students }}</td>
-      <td>{{ total_cgrade_students }}</td>
-      <td>{{ total_dgrade_students }}</td>
-      <td>{{ total_grades_quality }}</td>
-      <td>{{ total_grades_progress }}</td>
-    </tr>
-  </tbody>
-</table>
+</div>
+
+{% include 'common/report_bottom.html' %}
 
 {% endblock %}

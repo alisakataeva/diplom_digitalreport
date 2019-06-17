@@ -1,0 +1,15 @@
+
+
+{% if periods %}
+
+<script>
+  btn = document.getElementsByClassName('js-print')[0];
+  btn.addEventListener('click', function() {
+    $("#printed").printThis({
+      importStyle: true,
+      pageTitle: "Печать данных о школе",
+    });
+  });
+</script>
+
+{% endif %}

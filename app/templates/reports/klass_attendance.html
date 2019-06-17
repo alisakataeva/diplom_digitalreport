@@ -4,65 +4,69 @@
 
 <h1>Отчет классного руководителя о посещаемости</h1>
 
-{% include 'common/report_filtering.html' %}
+{% include 'common/report_top.html' %}
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-
-      <th>Период</th>
-      <th>ФИО учителя</th>
-      <th>Класс</th>
-
-      <th>ФИО обучающегося</th>
-      <th>По болезни</th>
-      <th>По уважительной причине</th>
-      <th>Прогулы</th>
-      <th>Всего</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {% for key, row in rows.items %}
-
-      {% for student_id, student in row.data.students.items %}
-
-        {% if forloop.first %}
+<div id="printed">
+    <table class="table table-bordered">
+      <thead>
         <tr>
-          <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ key }}</td>
-          <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.teacher }}</td>
-          <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.klass }}</td>
-        {% else %}
-        <tr>
-        {% endif %}
-          <td>{{ student.name }}</td>
-          <td>{{ student.skips_desease }}</td>
-          <td>{{ student.skips_reasonable }}</td>
-          <td>{{ student.skips }}</td>
-          <td>{{ student.all_skips }}</td>
-        </tr>
-
-      {% endfor %}
-
-      <tr class="table-warning">
-        <td class="text-right">Общее кол-во:</td>
-        <td>{{ row.data.total_skips_desease }}</td>
-        <td>{{ row.data.total_skips_reasonable }}</td>
-        <td>{{ row.data.total_skips }}</td>
-        <td>{{ row.data.total_all_skips }}</td>
-      </tr>
-
-    {% endfor %}
-
-    <tr class="table-primary">
-      <td colspan="4" class="text-right">Итог:</td>
-      <td>{{ total_skips_desease }}</td>
-      <td>{{ total_skips_reasonable }}</td>
-      <td>{{ total_skips }}</td>
-      <td>{{ total_all_skips }}</td>
-    </tr>
     
-  </tbody>
-</table>
+          <th>Период</th>
+          <th>ФИО учителя</th>
+          <th>Класс</th>
+    
+          <th>ФИО обучающегося</th>
+          <th>По болезни</th>
+          <th>По уважительной причине</th>
+          <th>Прогулы</th>
+          <th>Всего</th>
+    
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, row in rows.items %}
+    
+          {% for student_id, student in row.data.students.items %}
+    
+            {% if forloop.first %}
+            <tr>
+              <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ key }}</td>
+              <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.teacher }}</td>
+              <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.klass }}</td>
+            {% else %}
+            <tr>
+            {% endif %}
+              <td>{{ student.name }}</td>
+              <td>{{ student.skips_desease }}</td>
+              <td>{{ student.skips_reasonable }}</td>
+              <td>{{ student.skips }}</td>
+              <td>{{ student.all_skips }}</td>
+            </tr>
+    
+          {% endfor %}
+    
+          <tr class="table-warning">
+            <td class="text-right">Общее кол-во:</td>
+            <td>{{ row.data.total_skips_desease }}</td>
+            <td>{{ row.data.total_skips_reasonable }}</td>
+            <td>{{ row.data.total_skips }}</td>
+            <td>{{ row.data.total_all_skips }}</td>
+          </tr>
+    
+        {% endfor %}
+    
+        <tr class="table-primary">
+          <td colspan="4" class="text-right">Итог:</td>
+          <td>{{ total_skips_desease }}</td>
+          <td>{{ total_skips_reasonable }}</td>
+          <td>{{ total_skips }}</td>
+          <td>{{ total_all_skips }}</td>
+        </tr>
+        
+      </tbody>
+    </table>
+</div>
+
+{% include 'common/report_bottom.html' %}
 
 {% endblock %}

@@ -4,41 +4,46 @@
 
 <h1>Отчет о прохождении учебного материала</h1>
 
-{% include 'common/report_filtering.html' %}
+{% include 'common/report_top.html' %}
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Период</th>
-      <th>ФИО учителя</th>
-      <th>Класс</th>
-      <th>Предмет</th>
-      <th>Кол-во часов по плану</th>
-      <th>Кол-во выданных часов</th>
-      <th>Разница</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in rows %}
-    <tr>
-      <td>{{ row.display }}</td>
-      <td>{{ row.author.fio_uchit }}</td>
-      <td>{{ row.schoolyear.klass.get_number }}</td>
-      <td>{{ row.subject.pred }}</td>
-      <td>{{ row.kol_ch }}</td>
-      <td>{{ row.used_hours }}</td>
-      <td>{{ row.hours_diff }}</td>
-    </tr>
-    {% endfor %}
+<div id="printed">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Период</th>
+          <th>ФИО учителя</th>
+          <th>Класс</th>
+          <th>Предмет</th>
+          <th>Кол-во часов по плану</th>
+          <th>Кол-во выданных часов</th>
+          <th>Разница</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.display }}</td>
+          <td>{{ row.author.fio_uchit }}</td>
+          <td>{{ row.schoolyear.klass.get_number }}</td>
+          <td>{{ row.subject.pred }}</td>
+          <td>{{ row.kol_ch }}</td>
+          <td>{{ row.used_hours }}</td>
+          <td>{{ row.hours_diff }}</td>
+        </tr>
+        {% endfor %}
+    
+        <tr class="table-primary">
+          <td colspan="4" class="text-right">Итог:</td>
+          <td>{{ total_hours }}</td>
+          <td>{{ total_used }}</td>
+          <td>{{ total_diff }}</td>
+        </tr>
+    
+      </tbody>
+    </table>
 
-    <tr class="table-primary">
-      <td colspan="4" class="text-right">Итог:</td>
-      <td>{{ total_hours }}</td>
-      <td>{{ total_used }}</td>
-      <td>{{ total_diff }}</td>
-    </tr>
+</div>
 
-  </tbody>
-</table>
+{% include 'common/report_bottom.html' %}
 
 {% endblock %}

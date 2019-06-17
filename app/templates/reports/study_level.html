@@ -4,60 +4,65 @@
 
 <h1>Отчет об успеваемости по предметам</h1>
 
-{% include 'common/report_filtering.html' %}
+{% include 'common/report_top.html' %}
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
+<div id="printed">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+    
+          <th>Период</th>
+          <th>ФИО учителя</th>
+          <th>Предмет</th>
+          <th>Класс</th>
+          <th>Кол-во обучающихся</th>
+    
+          <th>"5"</th>
+          <th>"4"</th>
+          <th>"3"</th>
+          <th>"2"</th>
+    
+          <th>Качество знаний</th>
+          <th>% успеваемости</th>
+    
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+    
+          <td>{{ row.display }}</td>
+          <td>{{ row.author.fio_uchit }}</td>
+          <td>{{ row.subject.pred }}</td>
+          <td>{{ row.schoolyear.klass.get_number }}</td>
+          <td>{{ row.schoolyear.klass.get_students_count }}</td>
+    
+          <td>{{ row.marks.5 }}</td>
+          <td>{{ row.marks.4 }}</td>
+          <td>{{ row.marks.3 }}</td>
+          <td>{{ row.marks.2 }}</td>
+    
+          <td>{{ row.grades_quality }}</td>
+          <td>{{ row.grades_progress }}</td>
+    
+        </tr>
+        {% endfor %}
+    
+        <tr class="table-primary">
+          <td colspan="5" class="text-right">Итог:</td>
+          <td>{{ total_5 }}</td>
+          <td>{{ total_4 }}</td>
+          <td>{{ total_3 }}</td>
+          <td>{{ total_2 }}</td>
+          <td>{{ total_quality }}</td>
+          <td>{{ total_progress }}</td>
+        </tr>
+    
+      </tbody>
+    </table>
 
-      <th>Период</th>
-      <th>ФИО учителя</th>
-      <th>Предмет</th>
-      <th>Класс</th>
-      <th>Кол-во обучающихся</th>
+</div>
 
-      <th>"5"</th>
-      <th>"4"</th>
-      <th>"3"</th>
-      <th>"2"</th>
-
-      <th>Качество знаний</th>
-      <th>% успеваемости</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in rows %}
-    <tr>
-
-      <td>{{ row.display }}</td>
-      <td>{{ row.author.fio_uchit }}</td>
-      <td>{{ row.subject.pred }}</td>
-      <td>{{ row.schoolyear.klass.get_number }}</td>
-      <td>{{ row.schoolyear.klass.get_students_count }}</td>
-
-      <td>{{ row.marks.5 }}</td>
-      <td>{{ row.marks.4 }}</td>
-      <td>{{ row.marks.3 }}</td>
-      <td>{{ row.marks.2 }}</td>
-
-      <td>{{ row.grades_quality }}</td>
-      <td>{{ row.grades_progress }}</td>
-
-    </tr>
-    {% endfor %}
-
-    <tr class="table-primary">
-      <td colspan="5" class="text-right">Итог:</td>
-      <td>{{ total_5 }}</td>
-      <td>{{ total_4 }}</td>
-      <td>{{ total_3 }}</td>
-      <td>{{ total_2 }}</td>
-      <td>{{ total_quality }}</td>
-      <td>{{ total_progress }}</td>
-    </tr>
-
-  </tbody>
-</table>
+{% include 'common/report_bottom.html' %}
 
 {% endblock %}
