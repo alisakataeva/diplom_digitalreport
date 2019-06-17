@@ -4,7 +4,12 @@
 
 <nav class="navbar navbar-light bg-light">
   <a class="navbar-brand" href="/">Гибкий генератор цифровой отчетности образовательного учреждения</a>
+  <div class="btn-group" role="group" aria-label="Basic example">
+  {% if system_role == 'vice_principal' %}
+  <a class="btn btn-primary" href="{% url 'signup' %}">Зарегистрировать пользователя</a>
+  {% endif %}
   <a href="/logout" class="btn btn-light">Выйти</a>
+  </div>
 </nav>
 
 <br />
