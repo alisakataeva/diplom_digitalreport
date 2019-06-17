@@ -20,6 +20,7 @@
 
       <th>Учитель</th>
       <th>Ученик</th>
+      <th>Класс</th>
 
       <th>Примечание</th>
       <th></th>
@@ -45,6 +46,7 @@
 
       <td>{{ object.teacher.fio_uchit }}</td>
       <td>{{ object.student.fio_uch }}</td>
+      <td>{{ object.student.klass.get_number }}</td>
       
       <td>{{ object.get_prim_display|default:"-" }}</td>
       <td>
