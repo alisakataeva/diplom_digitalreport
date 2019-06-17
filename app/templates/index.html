@@ -74,11 +74,15 @@
         <a href="" class="dropdown-divider"></a>
 
 
+        {% if system_role == 'vice_principal' %}
+
         {% url 'subject_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Предметы</a>
 
 
         <a href="" class="dropdown-divider"></a>
+
+        {% endif %}
 
 
         <a class="nav-link disabled" href="#" style="background-color: #efefef;">Отчеты:</a>
