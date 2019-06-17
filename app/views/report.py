@@ -53,14 +53,17 @@ class StudyResultsReportView(ContextMixin, TemplateView):
         for plan in plans:
 
             hours = plan.kol_ch
-            used = ClassbookNote.objects.filter(program__plan=plan).count()
-            diff = used - hours
+            used = []
+            for lsn in ClassbookNote.objects.filter(program__plan=plan):
+                if (lsn.data_z, lsn.time_z) not in used:
+                    used.append((lsn.data_z, lsn.time_z))
+            diff = len(used) - hours
 
             total_hours += hours
-            total_used += used
+            total_used += len(used)
             total_diff += diff
 
-            plan.used_hours = used
+            plan.used_hours = len(used)
             plan.hours_diff = diff
 
         context['rows'] = plans
