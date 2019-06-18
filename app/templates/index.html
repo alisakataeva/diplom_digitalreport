@@ -32,7 +32,7 @@
 
         {% if system_role == 'vice_principal' %}
 
-        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Года и планы:</a>
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Учебные планы:</a>
 
         {% url 'schoolyear_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учебные года</a>
@@ -40,18 +40,21 @@
         {% url 'plan_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Планы</a>
 
+        {% url 'program_list' as page_url %}
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Программы</a>
+
 
         <a href="" class="dropdown-divider"></a>
 
 
         {% url 'teacher_list' as page_url %}
-        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Учителя</a>
+        <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Справочник учителей</a>
 
 
         <a href="" class="dropdown-divider"></a>
 
 
-        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Классы и ученики:</a>
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Справочник учащихся:</a>
 
         {% url 'klass_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Классы</a>
@@ -62,14 +65,18 @@
 
         <a href="" class="dropdown-divider"></a>
 
-        {% endif %}
+        {% else %}
 
+        <a class="nav-link disabled" href="#" style="background-color: #efefef;">Учебные планы:</a>
 
         {% url 'program_list' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Программы</a>
 
+        {% endif %}
 
-        <a href="" class="dropdown-divider"></a>
+
+
+        <!-- <a href="" class="dropdown-divider"></a> -->
 
 
         {% url 'classbooknote_list' as page_url %}
