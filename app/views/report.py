@@ -19,7 +19,7 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all()
 
-        if context.get('current_teacher'):
+        if context.get('current_teacher') and context.get('system_role') != 'vice_principal':
             try:
                 subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
                 plans = plans.filter(subject__in=subjects)
@@ -101,7 +101,7 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all().order_by("n_ob")
 
-        if context.get('current_teacher'):
+        if context.get('current_teacher') and context.get('system_role') != 'vice_principal':
             try:
                 subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
                 plans = plans.filter(subject__in=subjects)

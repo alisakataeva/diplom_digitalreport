@@ -21,7 +21,7 @@ class ProgramList(ContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if context.get('current_teacher'):
+        if context.get('current_teacher') and context.get('system_role') != 'vice_principal':
             try:
                 subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
                 context['object_list'] = self.queryset.filter(plan__subject__in=subjects)
