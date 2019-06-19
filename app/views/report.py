@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from app.models import Plan, ClassbookNote, Student, Klass
+from app.models import Plan, ClassbookNote, Student, Klass, Subject
 from app.mixins import ContextMixin
 
 # Create your views here.
@@ -19,42 +19,48 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all()
 
-        if context['current_klass']:
-            plans = plans.filter(schoolyear__klass=context['current_klass'])
+        if context.get('current_teacher'):
+            try:
+                subject = Subject.objects.get(teacher=context.get('current_teacher'))
+                plans = plans.filter(subject=subject)
+            except Subject.DoesNotExist:
+                plans = []
 
         # START Filtering
 
-        all_periods = []
-        all_klasses = []
+        if plans:
 
-        for plan in plans:
-            if (plan.n_ob, plan.k_ob) not in all_periods:
-                all_periods.append( (plan.n_ob, plan.k_ob) )
-            if plan.schoolyear.klass not in all_klasses:
-                all_klasses.append( plan.schoolyear.klass )
+            all_periods = []
+            all_klasses = []
 
-        selected_period = self.request.GET.get('period')
-        selected_klass = self.request.GET.get('klass')
-        if selected_period:
-            try:
-                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+            for plan in plans:
+                if (plan.n_ob, plan.k_ob) not in all_periods:
+                    all_periods.append( (plan.n_ob, plan.k_ob) )
+                if plan.schoolyear.klass not in all_klasses:
+                    all_klasses.append( plan.schoolyear.klass )
 
-                start = datetime.strptime(start, '%Y-%m-%d')
-                end = datetime.strptime(end, '%Y-%m-%d')
+            selected_period = self.request.GET.get('period')
+            selected_klass = self.request.GET.get('klass')
+            if selected_period:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                plans = plans.filter(n_ob=start, k_ob=end)
-            except Exception as e:
-                pass
+                    start = datetime.strptime(start, '%Y-%m-%d')
+                    end = datetime.strptime(end, '%Y-%m-%d')
 
-        if selected_klass: 
-            try:
-                klass = Klass.objects.get(pk=int( selected_klass ))
-                plans = plans.filter(schoolyear__klass=klass)
-            except Exception as e:
-                pass
+                    plans = plans.filter(n_ob=start, k_ob=end)
+                except Exception as e:
+                    pass
 
-        context['periods'] = all_periods
-        context['klasses'] = all_klasses
+            if selected_klass: 
+                try:
+                    klass = Klass.objects.get(pk=int( selected_klass ))
+                    plans = plans.filter(schoolyear__klass=klass)
+                except Exception as e:
+                    pass
+
+            context['periods'] = all_periods
+            context['klasses'] = all_klasses
 
         # END Filtering
 
@@ -95,43 +101,49 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
         plans = Plan.objects.all().order_by("n_ob")
 
-        if context['current_klass']:
-            plans = plans.filter(schoolyear__klass=context['current_klass'])
+        if context.get('current_teacher'):
+            try:
+                subject = Subject.objects.get(teacher=context.get('current_teacher'))
+                plans = plans.filter(subject=subject)
+            except Subject.DoesNotExist:
+                plans = []
 
         # START Filtering
 
-        all_periods = []
-        all_klasses = []
+        if plans:
+
+            all_periods = []
+            all_klasses = []
 
 
-        for plan in plans:
-            if (plan.n_ob, plan.k_ob) not in all_periods:
-                all_periods.append((plan.n_ob, plan.k_ob))
-            if plan.schoolyear.klass not in all_klasses:
-                all_klasses.append( plan.schoolyear.klass )
+            for plan in plans:
+                if (plan.n_ob, plan.k_ob) not in all_periods:
+                    all_periods.append((plan.n_ob, plan.k_ob))
+                if plan.schoolyear.klass not in all_klasses:
+                    all_klasses.append( plan.schoolyear.klass )
 
-        selected_period = self.request.GET.get('period')
-        selected_klass = self.request.GET.get('klass')
-        if selected_period:
-            try:
-                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+            selected_period = self.request.GET.get('period')
+            selected_klass = self.request.GET.get('klass')
+            if selected_period:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                start = datetime.strptime(start, '%Y-%m-%d')
-                end = datetime.strptime(end, '%Y-%m-%d')
+                    start = datetime.strptime(start, '%Y-%m-%d')
+                    end = datetime.strptime(end, '%Y-%m-%d')
 
-                plans = plans.filter(n_ob=start, k_ob=end)
-            except Exception as e:
-                pass
+                    plans = plans.filter(n_ob=start, k_ob=end)
+                except Exception as e:
+                    pass
 
-        if selected_klass: 
-            try:
-                klass = Klass.objects.get(pk=int( selected_klass ))
-                plans = plans.filter(schoolyear__klass=klass)
-            except Exception as e:
-                pass
+            if selected_klass: 
+                try:
+                    klass = Klass.objects.get(pk=int( selected_klass ))
+                    plans = plans.filter(schoolyear__klass=klass)
+                except Exception as e:
+                    pass
 
-        context['periods'] = all_periods
-        context['klasses'] = all_klasses
+            context['periods'] = all_periods
+            context['klasses'] = all_klasses
 
         # END Filtering
 

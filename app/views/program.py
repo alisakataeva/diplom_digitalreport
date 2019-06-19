@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
-from app.models import Program
+from app.models import Program, Subject
 from app.forms import ProgramForm
 from app.mixins import ContextMixin
 from app.const import CREATE_TEMPLATE, UPDATE_TEMPLATE, DELETE_TEMPLATE
@@ -21,8 +21,12 @@ class ProgramList(ContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if context.get('current_klass'):
-            context['object_list'] = self.queryset.filter(plan__schoolyear__klass=context.get('current_klass'))
+        if context.get('current_teacher'):
+            try:
+                subject = Subject.objects.get(teacher=context.get('current_teacher'))
+                context['object_list'] = self.queryset.filter(plan__subject=subject)
+            except Subject.DoesNotExist:
+                context['object_list'] = []
         return context
 
 
