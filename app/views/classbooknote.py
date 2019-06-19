@@ -36,7 +36,6 @@ class ClassbookNoteCreate(ContextMixin, CreateView):
         if self.request.GET.get('makecopy_from'):
             instance = ClassbookNote.objects.get(pk=int( self.request.GET.get('makecopy_from') ))
             context['form'] = ClassbookNoteForm(initial=model_to_dict(instance))
-        assert False, context['form']
         return context
 
     def get_success_url(self, **kwargs):

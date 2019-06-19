@@ -381,7 +381,6 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
         plans = Plan.objects.all().order_by("n_ob")
         if context['current_klass']:
             plans = plans.filter(schoolyear__klass=context['current_klass'])
-            assert False, 'eat'
 
         # START Filtering
 
