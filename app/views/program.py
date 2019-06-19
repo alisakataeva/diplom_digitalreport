@@ -23,8 +23,8 @@ class ProgramList(ContextMixin, ListView):
         context = super().get_context_data(**kwargs)
         if context.get('current_teacher'):
             try:
-                subject = Subject.objects.filter(teacher=context.get('current_teacher'))
-                context['object_list'] = self.queryset.filter(plan__subject=subject)
+                subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
+                context['object_list'] = self.queryset.filter(plan__subject__in=subjects)
             except Subject.DoesNotExist:
                 context['object_list'] = []
         return context

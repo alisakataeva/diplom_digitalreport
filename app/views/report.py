@@ -21,8 +21,8 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         if context.get('current_teacher'):
             try:
-                subject = Subject.objects.filter(teacher=context.get('current_teacher'))
-                plans = plans.filter(subject=subject)
+                subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
+                plans = plans.filter(subject__in=subjects)
             except Subject.DoesNotExist:
                 plans = []
 
@@ -103,8 +103,8 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
         if context.get('current_teacher'):
             try:
-                subject = Subject.objects.filter(teacher=context.get('current_teacher'))
-                plans = plans.filter(subject=subject)
+                subjects = Subject.objects.filter(teacher=context.get('current_teacher'))
+                plans = plans.filter(subject__in=subjects)
             except Subject.DoesNotExist:
                 plans = []
 
