@@ -111,7 +111,8 @@
         {% url 'report_klass_attendance' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Отчет классного руководителя о посещаемости</a>
 
-        {% if system_role == 'vice_principal' %}
+        {#% if system_role == 'vice_principal' %#}
+        {% if False %}
 
         {% url 'report_total_study_results' as page_url %}
         <a class="nav-link{% if page_url == request.path %} active{% endif %}" href="{{ page_url }}">Сводный отчет о прохождении учебного материала</a>

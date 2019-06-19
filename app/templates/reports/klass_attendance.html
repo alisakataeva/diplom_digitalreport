@@ -30,7 +30,7 @@
     
             {% if forloop.first %}
             <tr>
-              <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ key }}</td>
+              <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.period }}</td>
               <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.teacher }}</td>
               <td rowspan="{{ row.data.students_count|add:'+1' }}">{{ row.data.klass }}</td>
             {% else %}

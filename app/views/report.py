@@ -245,14 +245,15 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         for plan in plans:
 
             period = plan.display()
-            klass = plan.schoolyear.klass.get_number()
+            klass = plan.schoolyear.klass
 
-            # if not result_plans.get(period + "_" + klass):
-            if not result_plans.get(period):
-                result_plans[period] = { 'objects': [] }
-            result_plans[period]['objects'].append( plan )
-
-        assert False, result_plans
+            if not result_plans.get(period + "_" + klass.get_number()):
+                result_plans[period + "_" + klass.get_number()] = {
+                    'objects': [],
+                    'klass': klass,
+                    'period': period
+                }
+            result_plans[period + "_" + klass.get_number()]['objects'].append( plan )
 
         total_grades = {
             5: 0,
@@ -277,8 +278,8 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         for key, chunk in result_plans.items():
 
             teacher = "(кл.руководителя нет)"
-            if plans.first().schoolyear.klass.teacher:
-                teacher = plans.first().schoolyear.klass.teacher.display()
+            if chunk['klass'].teacher:
+                teacher = chunk['klass'].teacher.display()
 
             all_marks = {
                 5: 0,
@@ -290,8 +291,8 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
             chunk_data = {
 
                 'teacher': teacher,
-                'klass': plans.first().schoolyear.klass.get_number(),
-                'students_count': plans.first().schoolyear.klass.get_students_count(),
+                'klass': chunk['klass'].get_number(),
+                'students_count': chunk['klass'].get_students_count(),
 
                 'agrade_students': 0,
                 'bgrade_students': 0,
@@ -308,7 +309,7 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
             students_marks = {}
 
-            for student in Student.objects.filter(klass=plans.first().schoolyear.klass):
+            for student in Student.objects.filter(klass=chunk['klass']):
                 students_marks[student.pk] = {
                     5: 0,
                     4: 0,
@@ -380,16 +381,21 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
         plans = Plan.objects.all().order_by("n_ob")
         if context['current_klass']:
             plans = plans.filter(schoolyear__klass=context['current_klass'])
+            assert False, 'eat'
 
         # START Filtering
 
         all_periods = []
+        all_klasses = []
 
         for plan in plans:
             if (plan.n_ob, plan.k_ob) not in all_periods:
                 all_periods.append((plan.n_ob, plan.k_ob))
+            if plan.schoolyear.klass not in all_klasses:
+                all_klasses.append( plan.schoolyear.klass )
 
         selected_period = self.request.GET.get('period')
+        selected_klass = self.request.GET.get('klass')
         if selected_period:
             try:
                 start, end = selected_period.split("_")[0], selected_period.split("_")[1]
@@ -401,22 +407,32 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        if selected_klass: 
+            try:
+                klass = Klass.objects.get(pk=int( selected_klass ))
+                plans = plans.filter(schoolyear__klass=klass)
+            except Exception as e:
+                pass
+
         context['periods'] = all_periods
+        context['klasses'] = all_klasses
 
         # END Filtering
         
         result_plans = {}
 
-        if plans:
-            klass = plans.first().schoolyear.klass
-
         for plan in plans:
 
             period = plan.display()
+            klass = plan.schoolyear.klass
 
-            if not result_plans.get(period):
-                result_plans[period] = { 'objects': [] }
-            result_plans[period]['objects'].append( plan )
+            if not result_plans.get(period + "_" + klass.get_number()):
+                result_plans[period + "_" + klass.get_number()] = {
+                    'objects': [],
+                    'klass': klass,
+                    'period': period
+                }
+            result_plans[period + "_" + klass.get_number()]['objects'].append( plan )
 
         total_data = {
             'skips_desease': 0,
@@ -428,14 +444,14 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
         for key, chunk in result_plans.items():
 
             teacher = "(кл.руководителя нет)"
-            if klass.teacher:
-                teacher = klass.teacher.display()
+            if chunk['klass'].teacher:
+                teacher = chunk['klass'].teacher.display()
 
             chunk_data = {
 
                 'teacher': teacher,
-                'klass': klass.get_number(),
-                'students_count': klass.get_students_count(),
+                'klass': chunk['klass'].get_number(),
+                'students_count': chunk['klass'].get_students_count(),
                 'students': {},
 
                 'total_skips_desease': 0,
@@ -445,7 +461,7 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
             }
 
-            for student in Student.objects.filter(klass=klass):
+            for student in Student.objects.filter(klass=chunk['klass']):
                 chunk_data['students'][student.pk] = {
                     'name': student.display(),
 
@@ -456,7 +472,7 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
                 }
 
             for plan in chunk['objects']:
-                lessons = ClassbookNote.objects.filter(program__plan=plan, student__klass=klass)
+                lessons = ClassbookNote.objects.filter(program__plan=plan, student__klass=chunk['klass'])
 
                 for lsn in lessons:
                     attendance = lsn.pris
