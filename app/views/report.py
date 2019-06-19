@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from app.models import Plan, ClassbookNote, Student
+from app.models import Plan, ClassbookNote, Student, Klass
 from app.mixins import ContextMixin
 
 # Create your views here.
@@ -25,12 +25,16 @@ class StudyResultsReportView(ContextMixin, TemplateView):
         # START Filtering
 
         all_periods = []
+        all_klasses = []
 
         for plan in plans:
             if (plan.n_ob, plan.k_ob) not in all_periods:
-                all_periods.append((plan.n_ob, plan.k_ob))
+                all_periods.append( (plan.n_ob, plan.k_ob) )
+            if plan.schoolyear.klass not in all_klasses:
+                all_klasses.append( plan.schoolyear.klass )
 
         selected_period = self.request.GET.get('period')
+        selected_klass = self.request.GET.get('klass')
         if selected_period:
             try:
                 start, end = selected_period.split("_")[0], selected_period.split("_")[1]
@@ -42,7 +46,15 @@ class StudyResultsReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        if selected_klass: 
+            try:
+                klass = Klass.objects.get(pk=int( selected_klass ))
+                plans = plans.filter(schoolyear__klass=klass)
+            except Exception as e:
+                pass
+
         context['periods'] = all_periods
+        context['klasses'] = all_klasses
 
         # END Filtering
 
@@ -89,12 +101,17 @@ class StudyLevelReportView(ContextMixin, TemplateView):
         # START Filtering
 
         all_periods = []
+        all_klasses = []
+
 
         for plan in plans:
             if (plan.n_ob, plan.k_ob) not in all_periods:
                 all_periods.append((plan.n_ob, plan.k_ob))
+            if plan.schoolyear.klass not in all_klasses:
+                all_klasses.append( plan.schoolyear.klass )
 
         selected_period = self.request.GET.get('period')
+        selected_klass = self.request.GET.get('klass')
         if selected_period:
             try:
                 start, end = selected_period.split("_")[0], selected_period.split("_")[1]
@@ -106,7 +123,15 @@ class StudyLevelReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        if selected_klass: 
+            try:
+                klass = Klass.objects.get(pk=int( selected_klass ))
+                plans = plans.filter(schoolyear__klass=klass)
+            except Exception as e:
+                pass
+
         context['periods'] = all_periods
+        context['klasses'] = all_klasses
 
         # END Filtering
 
@@ -182,12 +207,16 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         # START Filtering
 
         all_periods = []
+        all_klasses = []
 
         for plan in plans:
             if (plan.n_ob, plan.k_ob) not in all_periods:
                 all_periods.append((plan.n_ob, plan.k_ob))
+            if plan.schoolyear.klass not in all_klasses:
+                all_klasses.append( plan.schoolyear.klass )
 
         selected_period = self.request.GET.get('period')
+        selected_klass = self.request.GET.get('klass')
         if selected_period:
             try:
                 start, end = selected_period.split("_")[0], selected_period.split("_")[1]
@@ -199,7 +228,15 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        if selected_klass: 
+            try:
+                klass = Klass.objects.get(pk=int( selected_klass ))
+                plans = plans.filter(schoolyear__klass=klass)
+            except Exception as e:
+                pass
+
         context['periods'] = all_periods
+        context['klasses'] = all_klasses
 
         # END Filtering
 
@@ -208,12 +245,14 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         for plan in plans:
 
             period = plan.display()
+            klass = plan.schoolyear.klass.get_number()
 
+            # if not result_plans.get(period + "_" + klass):
             if not result_plans.get(period):
                 result_plans[period] = { 'objects': [] }
             result_plans[period]['objects'].append( plan )
 
-        log = ''
+        assert False, result_plans
 
         total_grades = {
             5: 0,
@@ -236,7 +275,7 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
         }
 
         for key, chunk in result_plans.items():
-    
+
             teacher = "(кл.руководителя нет)"
             if plans.first().schoolyear.klass.teacher:
                 teacher = plans.first().schoolyear.klass.teacher.display()
