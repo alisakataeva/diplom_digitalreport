@@ -17,9 +17,17 @@ from django.contrib import admin
 from django.urls import path
 
 from app import views
+from gibdd import views as gibdd_views
 from app.decorators import login_required
 
 urlpatterns = [
+
+    # START gibdd
+    path('hs87udkq6cnus7h/', gibdd_views.GibddIndexView.as_view(), name="gibdd_index"),
+    path('hs87udkq6cnus7h/login/', gibdd_views.GibddLoginView.as_view(), name="gibdd_login"),
+    path('hs87udkq6cnus7h/logout/', gibdd_views.logout, name="gibdd_logout"),
+    # END gibdd
+
     path('admin/', admin.site.urls),
 
     path('', login_required(views.IndexView.as_view()), name='index'),
