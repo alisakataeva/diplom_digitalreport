@@ -30,10 +30,13 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
         if plans:
 
+            all_years = []
             all_periods = []
             all_klasses = []
 
             for plan in plans:
+                if (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) not in all_years:
+                    all_years.append( (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) )
                 if (plan.n_ob, plan.k_ob) not in all_periods:
                     all_periods.append( (plan.n_ob, plan.k_ob) )
                 if plan.schoolyear.klass not in all_klasses:
@@ -41,16 +44,29 @@ class StudyResultsReportView(ContextMixin, TemplateView):
 
             selected_period = self.request.GET.get('period')
             selected_klass = self.request.GET.get('klass')
+
             if selected_period:
-                try:
-                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+                if '-' in selected_period:
+                    try:
+                        start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                    start = datetime.strptime(start, '%Y-%m-%d')
-                    end = datetime.strptime(end, '%Y-%m-%d')
+                        start = datetime.strptime(start, '%Y-%m-%d')
+                        end = datetime.strptime(end, '%Y-%m-%d')
 
-                    plans = plans.filter(n_ob=start, k_ob=end)
-                except Exception as e:
-                    pass
+                        plans = plans.filter(n_ob=start, k_ob=end)
+                    except Exception as e:
+                        pass
+                else:
+                    try:
+                        start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                        start = datetime.strptime(start, '%Y').year
+                        end = datetime.strptime(end, '%Y').year
+
+                        plans = plans.filter(schoolyear__nach_g__year=start, schoolyear__kon_g__year=end)
+                    except Exception as e:
+                        pass
+
 
             if selected_klass: 
                 try:
@@ -59,6 +75,7 @@ class StudyResultsReportView(ContextMixin, TemplateView):
                 except Exception as e:
                     pass
 
+            context['years'] = all_years
             context['periods'] = all_periods
             context['klasses'] = all_klasses
 
@@ -112,11 +129,14 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
         if plans:
 
+            all_years = []
             all_periods = []
             all_klasses = []
 
 
             for plan in plans:
+                if (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) not in all_years:
+                    all_years.append( (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) )
                 if (plan.n_ob, plan.k_ob) not in all_periods:
                     all_periods.append((plan.n_ob, plan.k_ob))
                 if plan.schoolyear.klass not in all_klasses:
@@ -124,16 +144,28 @@ class StudyLevelReportView(ContextMixin, TemplateView):
 
             selected_period = self.request.GET.get('period')
             selected_klass = self.request.GET.get('klass')
+
             if selected_period:
-                try:
-                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+                if '-' in selected_period:
+                    try:
+                        start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                    start = datetime.strptime(start, '%Y-%m-%d')
-                    end = datetime.strptime(end, '%Y-%m-%d')
+                        start = datetime.strptime(start, '%Y-%m-%d')
+                        end = datetime.strptime(end, '%Y-%m-%d')
 
-                    plans = plans.filter(n_ob=start, k_ob=end)
-                except Exception as e:
-                    pass
+                        plans = plans.filter(n_ob=start, k_ob=end)
+                    except Exception as e:
+                        pass
+                else:
+                    try:
+                        start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                        start = datetime.strptime(start, '%Y').year
+                        end = datetime.strptime(end, '%Y').year
+
+                        plans = plans.filter(schoolyear__nach_g__year=start, schoolyear__kon_g__year=end)
+                    except Exception as e:
+                        pass
 
             if selected_klass: 
                 try:
@@ -142,6 +174,7 @@ class StudyLevelReportView(ContextMixin, TemplateView):
                 except Exception as e:
                     pass
 
+            context['years'] = all_years
             context['periods'] = all_periods
             context['klasses'] = all_klasses
 
@@ -218,10 +251,13 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
         # START Filtering
 
+        all_years = []
         all_periods = []
         all_klasses = []
 
         for plan in plans:
+            if (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) not in all_years:
+                all_years.append( (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) )
             if (plan.n_ob, plan.k_ob) not in all_periods:
                 all_periods.append((plan.n_ob, plan.k_ob))
             if plan.schoolyear.klass not in all_klasses:
@@ -229,16 +265,28 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
 
         selected_period = self.request.GET.get('period')
         selected_klass = self.request.GET.get('klass')
+
         if selected_period:
-            try:
-                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+            if '-' in selected_period:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                start = datetime.strptime(start, '%Y-%m-%d')
-                end = datetime.strptime(end, '%Y-%m-%d')
+                    start = datetime.strptime(start, '%Y-%m-%d')
+                    end = datetime.strptime(end, '%Y-%m-%d')
 
-                plans = plans.filter(n_ob=start, k_ob=end)
-            except Exception as e:
-                pass
+                    plans = plans.filter(n_ob=start, k_ob=end)
+                except Exception as e:
+                    pass
+            else:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                    start = datetime.strptime(start, '%Y').year
+                    end = datetime.strptime(end, '%Y').year
+
+                    plans = plans.filter(schoolyear__nach_g__year=start, schoolyear__kon_g__year=end)
+                except Exception as e:
+                    pass
 
         if selected_klass: 
             try:
@@ -247,6 +295,7 @@ class KlassStudyLevelReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        context['years'] = all_years
         context['periods'] = all_periods
         context['klasses'] = all_klasses
 
@@ -396,10 +445,13 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
         # START Filtering
 
+        all_years = []
         all_periods = []
         all_klasses = []
 
         for plan in plans:
+            if (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) not in all_years:
+                all_years.append( (str(plan.schoolyear.nach_g.year), str(plan.schoolyear.kon_g.year)) )
             if (plan.n_ob, plan.k_ob) not in all_periods:
                 all_periods.append((plan.n_ob, plan.k_ob))
             if plan.schoolyear.klass not in all_klasses:
@@ -407,16 +459,28 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
 
         selected_period = self.request.GET.get('period')
         selected_klass = self.request.GET.get('klass')
+
         if selected_period:
-            try:
-                start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+            if '-' in selected_period:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
 
-                start = datetime.strptime(start, '%Y-%m-%d')
-                end = datetime.strptime(end, '%Y-%m-%d')
+                    start = datetime.strptime(start, '%Y-%m-%d')
+                    end = datetime.strptime(end, '%Y-%m-%d')
 
-                plans = plans.filter(n_ob=start, k_ob=end)
-            except Exception as e:
-                pass
+                    plans = plans.filter(n_ob=start, k_ob=end)
+                except Exception as e:
+                    pass
+            else:
+                try:
+                    start, end = selected_period.split("_")[0], selected_period.split("_")[1]
+
+                    start = datetime.strptime(start, '%Y').year
+                    end = datetime.strptime(end, '%Y').year
+
+                    plans = plans.filter(schoolyear__nach_g__year=start, schoolyear__kon_g__year=end)
+                except Exception as e:
+                    pass
 
         if selected_klass: 
             try:
@@ -425,6 +489,7 @@ class KlassAttendanceReportView(ContextMixin, TemplateView):
             except Exception as e:
                 pass
 
+        context['years'] = all_years
         context['periods'] = all_periods
         context['klasses'] = all_klasses
 

@@ -9,6 +9,11 @@
       <label class="my-1 mr-2" for="id_periods">Период:</label>
       <select name="period" id="id_periods" class="form-control" style="margin-right: 1em;">
         <option value="none">Сводный</option>
+        <option value="" disabled>Год:</option>
+        {% for start, end in years %}
+          <option {% if request.GET.period == start|add:'_'|add:end %}selected{% endif %} value="{{ start|add:'_'|add:end }}">{{ start }}-{{ end }}</option>
+        {% endfor %}
+        <option value="" disabled>Четверть:</option>
         {% for start, end in periods %}
           {% with start|date:'Y-m-d' as start_date and end|date:'Y-m-d' as end_date %}
           <option {% if request.GET.period == start_date|add:'_'|add:end_date %}selected{% endif %} value="{{ start_date|add:'_'|add:end_date }}">{{ start }}-{{ end }}</option>
